@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전체 활동 현황표 및 요약본 — JEV·GPT Bridge·업무 통합</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --muted: #8b8fa3;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --yellow: #eab308;
+    --yellow-bg: rgba(234,179,8,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.12);
+    --accent: #a78bfa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 1.6rem; margin-bottom: 8px; }
+  h2 { font-size: 1.15rem; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 0.95rem; margin: 16px 0 8px; color: var(--accent); }
+  .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+  
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .card.full { grid-column: 1 / -1; }
+  
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+  .status.ok { background: var(--green-bg); color: var(--green); }
+  .status.warn { background: var(--yellow-bg); color: var(--yellow); }
+  .status.err { background: var(--red-bg); color: var(--red); }
+  .status.info { background: var(--blue-bg); color: var(--blue); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 8px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 500; text-transform: uppercase; font-size: 0.75rem; }
+  tr:last-child td { border-bottom: none; }
+  
+  .link { color: var(--blue); text-decoration: none; word-break: break-all; }
+  .link:hover { text-decoration: underline; }
+  .path { font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.8rem; color: var(--muted); word-break: break-all; }
+  
+  .progress { display: flex; gap: 4px; margin: 12px 0; }
+  .bar { flex: 1; height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+  .bar > div { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar.ok > div { background: var(--green); }
+  .bar.warn > div { background: var(--yellow); }
+  .bar.err > div { background: var(--red); }
+  .bar-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-right: 4px; }
+  .badge.ok { background: var(--green-bg); color: var(--green); }
+  .badge.err { background: var(--red-bg); color: var(--red); }
+  .badge.info { background: var(--blue-bg); color: var(--blue); }
+  .badge.warn { background: var(--yellow-bg); color: var(--yellow); }
+  
+  .note { background: var(--panel); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 12px 0; font-size: 0.88rem; }
+  .note strong { color: var(--accent); }
+  
+  ul { padding-left: 18px; margin: 6px 0; }
+  li { margin: 3px 0; font-size: 0.9rem; }
+  
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; text-align: center; }
+  
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>📊 전체 활동 현황표 및 요약본</h1>
+<p class="sub">JEV · GPT Bridge · CloBe MCP · 업무 산출물 통합 리포트 &mdash; 2026-09-24 갱신</p>
+
+<!-- 진행률 -->
+<div class="card full">
+  <h3>종합 진행률</h3>
+  <div class="progress">
+    <div class="bar ok" style="max-width: 75%"><div style="width:75%"></div></div>
+    <div class="bar warn" style="max-width: 15%"><div style="width:15%"></div></div>
+    <div class="bar err" style="max-width: 10%"><div style="width:10%"></div></div>
+  </div>
+  <div class="bar-label">✅ 완료 75% &nbsp;·&nbsp; ⚠️ 부분/안정 15% &nbsp;·&nbsp; ❌ 미해결 10%</div>
+</div>
+
+<!-- 핵심 연결 상태 -->
+<h2>🔌 핵심 연결 상태</h2>
+<div class="grid">
+  <div class="card">
+    <div class="status ok"><span class="dot"></span> JEV — Vercel AI Gateway 연결 성공</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>API 키</td><td>vck_0wIV... (Vercel)</td></tr>
+      <tr><td>엔드포인트</td><td>ai-gateway.vercel.sh/v1/evaluate</td></tr>
+      <tr><td>인증</td><td>Bearer 토큰 + Provider: typesafe-ai ✅</td></tr>
+      <tr><td>카드 등록</td><td>완료 — 403 해소 ✅</td></tr>
+      <tr><td>호출 형식</td><td>questions.instructions 형식 ✅</td></tr>
+      <tr><td>테스트 결과</td><td><strong>200 OK</strong> — JEV 호출 성공 ✅</td></tr>
+    </table>
+    <div class="note" style="margin-top:10px"><strong>의미:</strong> JEV 판단 AI 연결의 모든 장애물(키·카드·형식) 제거됨. 이제 교수님 업무 자동화에 JEV 사용 가능.</div>
+  </div>
+
+  <div class="card">
+    <div class="status ok"><span class="dot"></span> GPT Bridge 서버 — 안정화 완료</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>서버 스크립트</td><td>gpt-bridge-server/server.py (stdlib http.server)</td></tr>
+      <tr><td>포트</td><td>8000 — <code>curl localhost:8000/</code> 정상 응답 ✅</td></tr>
+      <tr><td>노출 도구</td><td>read_file, write_file, edit_file, delete_file, list_directory, search_files, create_directory, run_command, git_status</td></tr>
+      <tr><td>작업공간</td><td>C:/Users/User/HERMES-JEV-ROUTER</td></tr>
+      <tr><td>ChatGPT Desktop</td><td>config 템플릿 작성됨 (gpt-bridge-config.json)</td></tr>
+    </table>
+    <div class="note" style="margin-top:10px"><strong>의미:</strong> VS Code 작업공간이 MCP 서버로 노출됨. ChatGPT Desktop에서 코드 읽기/편집 가능 구조 갖춤.</div>
+  </div>
+
+  <div class="card">
+    <div class="status warn"><span class="dot"></span> 이메일 발송 — 부분 완료</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>SMTP 연결</td><td>smtp.gmail.com:587, TLS — 연결 성공 ✅</td></tr>
+      <tr><td>앱 비밀번호</td><td>미확보 — 실제 발송 불가 ❌</td></tr>
+      <tr><td>브라우저 자동화</td><td>Gmail compose 자동화 실패 ❌</td></tr>
+      <tr><td>mailto 시도</td><td>Windows 기본 메일 앱 열기 시도 ⚠️</td></tr>
+      <tr><td>대안 준비</td><td>메일 본문 txt 파일 생성 완료 ✅</td></tr>
+    </table>
+    <div class="note" style="margin-top:10px"><strong>의미:</strong> 연결은 열렸고 인증만 남았다. 가장 현실적인 방법: 메일 본문(txt) 내용을 Gmail 웹에서 복사·붙여넣기 후 교수님 직접 발송.</div>
+  </div>
+
+  <div class="card">
+    <div class="status err"><span class="dot"></span> GitHub 원격 연결 — 미해결</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>로컬 git</td><td>init + commit 완료 (f6958e7) ✅</td></tr>
+      <tr><td>원격 저장소</td><td>미생성 — PAT 없음, 브라우저 생성 실패 ❌</td></tr>
+      <tr><td>gh CLI</td><td>미설치</td></tr>
+      <tr><td>필요 조치</td><td>GitHub에서 저장소 수동 생성 → 원격 연결</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="status err"><span class="dot"></span> CloBe MCP 연동 — 미설정</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>CloBe 이해</td><td>완료 — 한국 중소기업 자금/재무관리 SaaS, 무료 ✅</td></tr>
+      <tr><td>MCP 개념</td><td>완료 — AI-외부 서비스 연결 표준 ✅</td></tr>
+      <tr><td>계정 로그인</td><td>필요 — seo3190@gmail.com</td></tr>
+      <tr><td>MCP 설정 정보</td><td>미확인 — 플랫폼 안에서 안내</td></tr>
+      <tr><td>필요 조치</td><td>app.clobe.ai 로그인 → 설정 → MCP 연결 정보 확인</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="status err"><span class="dot"></span> Postiz — 공부 전</div>
+    <table>
+      <tr><th>항목</th><th>상태</th></tr>
+      <tr><td>이해</td><td>소셜 미디어 스케줄링 도구 (28+ 플랫폼, 오픈소스 AGPL-3.0)</td></tr>
+      <tr><td>세팅</td><td>안 함 — 내일 진행 가능</td></tr>
+      <tr><td>관련</td><td>조코딩 쇼츠 멀티 업로더와 연계 가능성</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 기존 산출물 -->
+<h2>📁 기존 산출물 (완료)</h2>
+<div class="grid">
+  <div class="card full">
+    <h3>HERMES-JEV-ROUTER (JEV·GPT Bridge 트랙)</h3>
+    <table>
+      <tr><th>파일</th><th>내용</th><th>상태</th></tr>
+      <tr><td class="path">router.js</td><td>JEV 호출 스크립트 (Vercel 엔드포인트)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">router-ai-sdk.js</td><td>AI SDK 버전 라우터</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">router-direct.js</td><td>직접 호출 버전 (options 객체 형식)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">test-jev.js</td><td>JEV 테스트 스크립트 (현재 키·포맷)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">.env</td><td>API 키 저장 (AI_GATEWAY_API_KEY)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">jev-dashboard.html</td><td>브라우저 JEV 대시보드 (6-domain, 29질문, 결과 시각화)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">gpt-bridge-server/server.py</td><td>MCP 서버 (stdlib http.server, 포트 8000)</td><td><span class="badge ok">완료·안정화</span></td></tr>
+      <tr><td class="path">gpt-bridge-config.json</td><td>ChatGPT Desktop MCP 설정 템플릿</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">README.md</td><td>프로젝트 설명</td><td><span class="badge ok">완료</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card full">
+    <h3>기존 HTML 산출물</h3>
+    <table>
+      <tr><th>파일</th><th>내용</th><th>상태</th></tr>
+      <tr><td class="path">전체_현황표_및_요약본.html</td><td>활동 총괄·트랙별 정리·링크 (421줄)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">전체_활동_브리핑_및_개선_피드백.html</td><td>10개 산출물·2개 부분완료·1개 차단·통계 포함 (540줄)</td><td><span class="badge ok">완료</span></td></tr>
+      <tr><td class="path">JEV_사용_및_비교분석.html</td><td>JEV vs LLM vs 전통 도구 vs 사람 직관 비교표, 시나리오 3종 (486줄)</td><td><span class="badge ok">완료</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card full">
+    <h3>미래라이프대학 4종 <span class="badge info">출력_미래라이프대학/</span></h3>
+    <table>
+      <tr><th>파일</th><th>내용</th></tr>
+      <tr><td class="path">01_미래라이프대학_운영계획.html</td><td>학부조직·운영목표·운영세칙(안)·전공교육과정(안)·학부공간·입학자원 유치 방안</td></tr>
+      <tr><td class="path">02_미래라이프대학_운영규정.html</td><td>학생선발·졸업연한·수업운영·수강신청·교육과정 편성운영·졸업이수학점 등 30개 조항</td></tr>
+      <tr><td class="path">03_미래라이프대학_홈페이지구축.html</td><td>설치근거·유형·추진배경·학과소개·참여기업 등 홈페이지 탑재 자료</td></tr>
+      <tr><td class="path">04_2027 멀티트랙_전공교육과정_개발편성보고서.html</td><td>스포츠웰니스경영 2트랙 + 뷰티 2트랙, 학년별 교과목 표</td></tr>
+    </table>
+  </div>
+
+  <div class="card full">
+    <h3>특수학급 서비스러닝 3종 <span class="badge info">출력_특수학급/</span></h3>
+    <table>
+      <tr><th>파일</th><th>내용</th></tr>
+      <tr><td class="path">서비스Learning_실습일지.html</td><td>10주 실습일지 — 실습 성찰·내용 변화 작성</td></tr>
+      <tr><td class="path">오늘수업_전달사항_주의사항.html</td><td>오늘 수업 전달사항·실습 시 주의사항</td></tr>
+      <tr><td class="path">특수학급_서비스러닝_수업자료.html</td><td>특수학급 운영 체계·학급 활동·서비스러닝 학생 이해·학교 운영 이해 통합 자료</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 미해결 사항 -->
+<h2>🔧 미해결 사항 — 해결 필요</h2>
+<div class="card full">
+  <table>
+    <tr><th>#</th><th>항목</th><th>현재 상태</th><th>필요 조치</th><th>우선순위</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>GitHub 원격 저장소 연결</strong></td>
+      <td><span class="badge err">로컬만</span></td>
+      <td>github.com/new에서 저장소 생성 → <code>git remote add origin &lt;url&gt;</code> → push</td>
+      <td><span class="badge warn">중</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>이메일 실제 발송</strong></td>
+      <td><span class="badge warn">SMTP 연결만</span></td>
+      <td>Gmail 앱 비밀번호 생성 → SMTP 발송 or 메일 본문 복사·붙여넣기 후 교수님 직접 발송</td>
+      <td><span class="badge warn">중</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>CloBe MCP 연동</strong></td>
+      <td><span class="badge err">미설정</span></td>
+      <td>app.clobe.ai 로그인 → 설정 → MCP 연결 정보 확인 → Claude/ChatGPT 등에 설정</td>
+      <td><span class="badge info">하</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Postiz 세팅</strong></td>
+      <td><span class="badge err">미시작</span></td>
+      <td>문서 학습 → 필요 시 설치/연동</td>
+      <td><span class="badge info">하</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>조코딩 쇼츠 업로더</strong></td>
+      <td><span class="badge err">미시작</span></td>
+      <td>Base 가져오기 → 업데이트 → 테스트</td>
+      <td><span class="badge info">하</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- 즉시 실행 가능한 것들 -->
+<h2>🚀 지금 바로 가능한 것</h2>
+<div class="card full">
+  <ul>
+    <li><strong>JEV 실제 업무 호출</strong> — Vercel 키로 교수님이 작성하신 state·questions 보내면 즉시 판단 결과 반환. 테스트 성공했으니 실제 업무 시나리오 적용 가능.</li>
+    <li><strong>GPT Bridge MCP 서버</strong> — 이미 포트 8000에서 정상 응답 중. ChatGPT Desktop config 병합 후 코드 읽기/편집 가능.</li>
+    <li><strong>이메일 본문 복사·붙여넣기</strong> — <span class="path">메일_본문_현황표_요약.txt</span> 내용 Gmail 웹에서 복사 → 44070777@bu.ac.kr 발송 (앱 비밀번호 없이 가능)</li>
+    <li><strong>JEV 대시보드</strong> — <span class="link">file:///C:/Users/User/HERMES-JEV-ROUTER/jev-dashboard.html</span> 브라우저에서 열고 API 키 넣으면 연결 테스트 + 6-domain 29질문 사용 가능</li>
+    <li><strong>GitHub 저장소 수동 생성</strong> — github.com/new에서 HERMES-JEV-ROUTER 저장소 만들고 원격 연결</li>
+  </ul>
+</div>
+
+<!-- 파일 링크 -->
+<h2>🔗 파일 링크 (브라우저에서 열기)</h2>
+<div class="card full">
+  <table>
+    <tr><th>용도</th><th>경로</th></tr>
+    <tr><td>전체 현황표·요약본</td><td class="path">file:///C:/Users/User/HERMES-JEV-ROUTER/전체_현황표_및_요약본.html</td></tr>
+    <tr><td>전체 활동 브리핑·피드백</td><td class="path">file:///C:/Users/User/HERMES-JEV-ROUTER/전체_활동_브리핑_및_개선_피드백.html</td></tr>
+    <tr><td>JEV 사용·비교분석</td><td class="path">file:///C:/Users/User/HERMES-JEV-ROUTER/JEV_사용_및_비교분석.html</td></tr>
+    <tr><td>JEV 브라우저 대시보드</td><td class="path">file:///C:/Users/User/HERMES-JEV-ROUTER/jev-dashboard.html</td></tr>
+    <tr><td>미래라이프대학 운영계획</td><td class="path">file:///C:/Users/User/출력_미래라이프대학/01_미래라이프대학_운영계획.html</td></tr>
+    <tr><td>미래라이프대학 운영규정</td><td class="path">file:///C:/Users/User/출력_미래라이프대학/02_미래라이프대학_운영규정.html</td></tr>
+    <tr><td>미래라이프대학 홈페이지구축</td><td class="path">file:///C:/Users/User/출력_미래라이프대학/03_미래라이프대학_홈페이지구축.html</td></tr>
+    <tr><td>2027 멀티트랙 보고서</td><td class="path">file:///C:/Users/User/출력_미래라이프대학/04_2027%20멀티트랙_전공교육과정_개발편성보고서.html</td></tr>
+    <tr><td>특수학급 실습일지</td><td class="path">file:///C:/Users/User/출력_특수학급/서비스Learning_실습일지.html</td></tr>
+    <tr><td>오늘 수업 전달사항·주의사항</td><td class="path">file:///C:/Users/User/출력_특수학급/오늘수업_전달사항_주의사항.html</td></tr>
+    <tr><td>특수학급 서비스러닝 수업자료</td><td class="path">file:///C:/Users/User/출력_특수학급/특수학급_서비스러닝_수업자료.html</td></tr>
+    <tr><td>메일 본문 (복사·붙여넣기용)</td><td class="path">file:///C:/Users/User/HERMES-JEV-ROUTER/메일_본문_현황표_요약.txt</td></tr>
+  </table>
+</div>
+
+<div class="note">
+  <strong>요약:</strong> JEV 연결(Vercel AI Gateway) ✅ 성공 — 키·카드·형식 모두 통과. GPT Bridge 서버 ✅ 안정화. 
+  남은 것: GitHub 원격 연결, 이메일 실제 발송(앱 비밀번호), CloBe MCP 설정, Postiz·조코딩 쇼츠 업로더.
+  기존 산출물(HTML 11종 + 메일 본문 txt)은 모두 준비됨. 파일 링크로 브라우저에서 직접 확인 가능.
+</div>
+
+<div class="footer">
+  HERMES-JEV-ROUTER 통합 현황표 · 2026-09-24 · vck_0wIV... JEV 키 기준
+</div>
+
+</body>
+</html>

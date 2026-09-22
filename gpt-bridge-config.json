@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "gpt-bridge": {
+      "command": "node",
+      "args": ["C:\\Users\\User\\AppData\\Local\\hermes\\cache\\browser-use\\workspace\\20260920_165935_e860cb32\\gpt-bridge-server\\server.js"],
+      "env": {
+        "WORKSPACE": "C:\\Users\\User\\HERMES-JEV-ROUTER",
+        "PORT": "8000"
+      },
+      "timeout": 30,
+      "disabled": false
+    }
+  }
+}

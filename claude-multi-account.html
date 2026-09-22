@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Claude 다중 계정 — 3개 동시 사용</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f1117; color: #e4e4e7;
+    padding: 20px; max-width: 600px; margin: 0 auto;
+  }
+  h2 { font-size: 1.2rem; margin-bottom: 12px; }
+  .account-row { display:flex; align-items:center; gap:8px; margin:8px 0; }
+  .account-row input[type="password"] { flex:1; padding:8px 12px; background:#1a1d27; border:1px solid #2a2d3a; border-radius:6px; color:#e4e4e7; font-size:0.9rem; }
+  .account-row button { padding:8px 16px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.85rem; }
+  .account-row button:hover { background:#2563eb; }
+  .account-row .status { font-size:0.8rem; color:#8b8fa3; }
+  .account-row .status.saved { color:#22c55e; }
+  select, textarea { width:100%; padding:10px 12px; background:#1a1d27; border:1px solid #2a2d3a; border-radius:6px; color:#e4e4e7; font-size:0.95rem; margin:6px 0; }
+  textarea { min-height:80px; resize:vertical; }
+  button.send { width:100%; padding:12px; background:#a78bfa; color:#fff; border:none; border-radius:8px; font-size:1rem; cursor:pointer; margin:8px 0; }
+  button.send:hover { background:#8b5cf6; }
+  button.send:disabled { background:#2a2d3a; color:#6b7280; cursor:not-allowed; }
+  #resp { background:#1a1d27; border:1px solid #2a2d3a; border-radius:8px; padding:14px; min-height:100px; white-space:pre-wrap; font-size:0.9rem; margin-top:12px; }
+  .none { color:#8b8fa3; font-size:0.8rem; margin:4px 0; }
+</style>
+</head>
+<body>
+<h2> Claude 3개 계정 동시 사용</h2>
+
+<h3>1. 계정별 API 키 등록</h3>
+<div class="account-row">
+  <span>계정 1</span>
+  <input type="password" id="key1" placeholder="sk-ant-api03-...">
+  <button onclick="saveKey('key1')">저장</button>
+  <span class="status" id="status1"></span>
+</div>
+<div class="account-row">
+  <span>계정 2</span>
+  <input type="password" id="key2" placeholder="sk-ant-api03-...">
+  <button onclick="saveKey('key2')">저장</button>
+  <span class="status" id="status2"></span>
+</div>
+<div class="account-row">
+  <span>계정 3</span>
+  <input type="password" id="key3" placeholder="sk-ant-api03-...">
+  <button onclick="saveKey('key3')">저장</button>
+  <span class="status" id="status3"></span>
+</div>
+<p class="none">※ 각 계정별 API 키는 console.anthropic.com/settings/keys 에서 발급</p>
+
+<hr>
+<h3>2. 계정 선택 + 채팅</h3>
+<select id="acct">
+  <option value="none">— 계정 선택 —</option>
+  <option value="key1">계정 1</option>
+  <option value="key2">계정 2</option>
+  <option value="key3">계정 3</option>
+</select>
+<textarea id="msg" placeholder="Claude에게 질문..."></textarea>
+<button class="send" id="sendBtn" onclick="send()" disabled>전송</button>
+<pre id="resp">결과가 여기에 표시됩니다...</pre>
+
+<script>
+// 저장된 키 로딩
+window.addEventListener('DOMContentLoaded', () => {
+  for (let i = 1; i <= 3; i++) {
+    const stored = localStorage.getItem('claude_key' + i);
+    if (stored) document.getElementById('key' + i).value = stored;
+  }
+  updateSendButton();
+});
+
+function saveKey(id) {
+  const key = document.getElementById(id).value.trim();
+  if (!key) {
+    document.getElementById('status' + id.slice(3)).textContent = '키 입력 필요';
+    return;
+  }
+  localStorage.setItem('claude_' + id, key);
+  document.getElementById('status' + id.slice(3)).textContent = '저장됨';
+  document.getElementById('status' + id.slice(3)).className = 'status saved';
+  updateSendButton();
+  // 다음 계정으로 포커스 이동
+  const next = document.getElementById(id.replace('key', 'key') + (parseInt(id.slice(3)) + 1));
+  if (next && next.id) setTimeout(() => next.focus(), 100);
+}
+
+function updateSendButton() {
+  const key = localStorage.getItem('claude_' + document.getElementById('acct').value);
+  document.getElementById('sendBtn').disabled = !key || key === 'undefined';
+}
+
+document.getElementById('acct').addEventListener('change', updateSendButton);
+
+async function send() {
+  const key = localStorage.getItem('claude_' + document.getElementById('acct').value);
+  const prompt = document.getElementById('msg').value.trim();
+  if (!key || !prompt) return;
+  
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+  document.getElementById('resp').textContent = '생각 중...';
+  
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': key,
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      document.getElementById('resp').textContent = data.content?.[0]?.text || '(응답 없음)';
+    } else {
+      document.getElementById('resp').textContent = '오류: ' + (data.error?.message || resp.status);
+    }
+  } catch(e) {
+    document.getElementById('resp').textContent = '네트워크 오류: ' + e.message;
+  }
+  
+  btn.disabled = false;
+  btn.textContent = '전송';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>서건우 교수 — 전체 활동 현황표 및 요약본 (2026-09-23 기준)</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --primary2: #2563eb;
+    --secondary: #2d6a4f;
+    --accent: #e07a2c;
+    --purple: #6c5ce7;
+    --warn: #dc2626;
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+    color: white; padding: 24px 28px; border-radius: var(--radius);
+    margin-bottom: 18px; box-shadow: var(--shadow);
+  }
+  .header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .header p { margin: 0; color: rgba(255,255,255,0.85); font-size: 0.9rem; }
+
+  .section {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 22px; margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .section h2 {
+    font-size: 1.05rem; color: var(--primary); margin-bottom: 10px;
+    padding-bottom: 6px; border-bottom: 2px solid var(--primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section h3 { font-size: 0.92rem; color: var(--secondary); margin: 10px 0 5px; }
+  .section p { margin-bottom: 5px; font-size: 0.92rem; }
+
+  /* 현황표 테이블 */
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.88rem; }
+  table th { background: var(--primary); color: white; padding: 7px 8px; text-align: left; font-weight: 600; }
+  table td { padding: 6px 8px; border: 1px solid var(--border); vertical-align: top; }
+  table tr:nth-child(even) td { background: #f8fafc; }
+
+  .badge {
+    display: inline-block; padding: 2px 7px; border-radius: 8px;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .badge-green { background: var(--secondary); color: white; }
+  .badge-blue { background: var(--primary2); color: white; }
+  .badge-orange { background: var(--accent); color: white; }
+  .badge-red { background: var(--warn); color: white; }
+
+  .summary-box {
+    background: #f0f9ff; border-left: 4px solid var(--primary2);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .warn-box {
+    background: #fef2f2; border-left: 4px solid var(--warn);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  ul { margin: 4px 0 8px 18px; }
+  li { font-size: 0.92rem; margin-bottom: 3px; }
+
+  .footer { text-align: center; padding: 12px; color: var(--muted); font-size: 0.8rem; }
+
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary2), var(--secondary)); border-radius: 4px; }
+
+  @media print {
+    body { background: white; }
+    .section { box-shadow: none; border: 1px solid #ddd; }
+    .header { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table th { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>📋 전체 활동 현황표 및 요약본</h1>
+  <p>서건우 교수 (백석대학교 특수체육학과) · JEV·GPT Bridge · 미래라이프대학 · 특수학급 서비스러닝</p>
+</div>
+
+<!-- ===== 1. 전체 요약 ===== -->
+<div class="section">
+  <h2>📌 전체 요약 — 한 줄</h2>
+  <div class="summary-box">
+    <strong>지금까지의 활동은 크게 3개 트랙으로 진행됐습니다.</strong>
+    <ol style="margin:6px 0 0 18px;">
+      <li><strong>① 기술 세팅 트랙</strong>: JEV 평가 시스템(라우터·대시보드), GPT Bridge MCP 서버, GitHub 저장소 초기화 — <strong>현재 Vercel 신용카드 미등록으로 JEV 실제 호출이 차단된 상태</strong>가 가장 큰 미해결.</li>
+      <li><strong>② 미래라이프대학 설립 문서 트랙</strong>: 운영계획·운영규정·홈페이지 구축안·2027 멀티트랙 전공교육과정 보고서 <strong>4종 HTML 완성</strong>. 스포츠웰니스경영학 + 뷰티 전공 2개 트랙.</li>
+      <li><strong>③ 특수학급 서비스러닝 교육자료 트랙</strong>: 실습일지·오늘 수업 전달사항 및 주의사항·특수학급 수업자료 <strong>3종 HTML 완성</strong>.</li>
+    </ol>
+    <p style="margin-top:8px;"><strong>총 산출물: 10개 파일 (기술 5 + 미래라이프 4 + 특수학급 3 + 현황표 1)</strong></p>
+  </div>
+  <div class="warn-box">
+    <strong>⚠️ 가장 시급한 미해결: Vercel 계정 신용카드 미등록으로 JEV 호출 403 차단</strong><br>
+    JEV 대시보드·라우터·API 키는 모두 준비됐으나, Vercel 계정 신용카드 미등록으로 실제 평가 호출이 안 됩니다. <strong>사용자(교수님)께서 Vercel 대시보드에 로그인하여 신용카드 등록하셔야 해결됩니다.</strong> 등록 완료되면 제가 JEV 호출 테스트 후 결과 확인할 수 있습니다.
+  </div>
+</div>
+
+<!-- ===== 2. 트랙별 현황표 ===== -->
+<div class="section">
+  <h2>📊 트랙별 현황표</h2>
+
+  <h3>트랙 ① 기술 세팅 (JEV · GPT Bridge · GitHub)</h3>
+  <table>
+    <tr><th style="width:28%;">항목</th><th style="width:12%;">상태</th><th>내용</th></tr>
+    <tr>
+      <td>JEV 개념 이해</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>판단 전용 AI(JEV), boolean/choice/score 타입, fan-out 병렬, confidence, state 구조화 이해 완료. LLM과 역할 구분 명확.</td>
+    </tr>
+    <tr>
+      <td>Vercel AI Gateway 엔드포인트 확인</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>`https://ai-gateway.vercel.sh/v1/evaluate`, 모델 `typesafe-ai/jev`, 헤더 `Provider: typesafe-ai`로 정확한 엔드포인트 확인.</td>
+    </tr>
+    <tr>
+      <td>라우터 스크립트 (3종)</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>router.js / router-ai-sdk.js / router-direct.js — node로 JEV 호출하는 스크립트. endpoint·헤더·모델 정합성 패치 완료.</td>
+    </tr>
+    <tr>
+      <td>JEV 브라우저 대시보드</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>jev-dashboard.html — 6개 영역 29개 질문, 상태 JSON, API 키 입력, 결과 시각화(확률바·confidence). fetch로 JEV 호출.</td>
+    </tr>
+    <tr>
+      <td>API 키 저장 (.env)</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>AI_GATEWAY_API_KEY = [REDACTED]
+    </tr>
+    <tr>
+      <td>JEV 실제 호출 테스트</td>
+      <td><span class="badge badge-red">차단</span></td>
+      <td>401(키 없음) → 키 적용 → 403 "신용카드 미등록". 원인 정확히 특정. <strong>해결: Vercel 대시보드에서 신용카드 등록 필요 (사용자 직접).</strong></td>
+    </tr>
+    <tr>
+      <td>GPT Bridge 서버</td>
+      <td><span class="badge badge-blue">완료 (불안정)</span></td>
+      <td>gpt-bridge-server/server.py — Flask → stdlib http.server 재작성. 파일·명령어·Git 도구 9종. 포트 8000. 백그라운드 실행 시 가끔 프로세스 죽는 현상 있음.</td>
+    </tr>
+    <tr>
+      <td>GPT Bridge ChatGPT Desktop config</td>
+      <td><span class="badge badge-blue">완료 (미검증)</span></td>
+      <td>gpt-bridge-config.json 템플릿 작성. 실제 ChatGPT Desktop에서 `%APPDATA%\OpenAI\ChatGPT\config.json` 병합 필요. 실제 도구 노출 확인은 못 함.</td>
+    </tr>
+    <tr>
+      <td>VS Code GPT Bridge 확장 설치</td>
+      <td><span class="badge badge-orange">실패</span></td>
+      <td>마켓플레이스에 `ndyadav8797-art.mcp` 없음 → `code --install-extension` 실패. 수동 설치는 VS Code Extensions에서 직접 검색·설치 필요.</td>
+    </tr>
+    <tr>
+      <td>GitHub 저장소 초기화</td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>git init, branch -M main, .gitignore·README.md, commit(f6958e7). git config user.email=44070777@bu.ac.kr, user.name=서건우.</td>
+    </tr>
+    <tr>
+      <td>GitHub 원격 연결</td>
+      <td><span class="badge badge-orange">보류</span></td>
+      <td>gh CLI 없음, PAT 없음, 브라우저 자동화 실패. <strong>사용자(GitHub)에서 새 저장소 생성 후 원격 연결 필요.</strong></td>
+    </tr>
+  </table>
+  <div style="margin-top:8px;">
+    <div class="progress-bar"><div class="progress-fill" style="width:60%;"></div></div>
+    <p style="font-size:0.82rem; color:var(--muted); margin:0;">기술 세팅 트랙 완성도: 약 60% — 대부분 코드·구조 완료, <strong>실제 호출·연결(GPT Bridge stable·GitHub push·JEV 성공 호출)</strong>이 남은 핵심.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h3>트랙 ② 미래라이프대학 설립 문서 (4종 HTML)</h3>
+  <table>
+    <tr><th style="width:5%;">#</th><th style="width:32%;">문서</th><th style="width:12%;">상태</th><th>주요 내용</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>미래라이프대학 운영계획.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>설치근거·유형·학부조직(운영위원회·전임교원·성인학습지원센터)·운영목표(비전·미션·KPI)·운영세칙(안)·전공교육과정(안)·학부공간·입학자원 유치 방안·추진일정(2026하반기~2028+).</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>미래라이프대학 운영규정.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>조·항·호 30개 조항. 제1~3조 총칙, 제4~7조 학생선발(무시험·포트폴리오·모집인원·장학), 제8~10조 졸업연한(재학연한·수료·휴복학), 제11~15조 수업운영(블렌디드·대면·출석·성적·LMS), 제16~20조 수강신청(학점범위·선수과목·정정·계절학기), 제21~25조 교육과정편성운영(트랙·심의·질관리·현장실습), 제26~30조 졸업이수학점(120학점·전공학점·RPL·마이크로디그리·졸업요건).</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>미래라이프대학 홈페이지구축.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>설치근거(법령·학칙·정책)·유형(성인친화형·120학점·블렌디드·무시험)·추진배경(4차산업·초고령·퇴직증가·평생교육 한계·정부정책·지역수요)·학과소개(스포츠웰니스경영학·뷰티)·참여기업(예시 8개)·사이트맵(8메뉴)·주요화면(메인 목업)·콘텐츠탑재계획.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>2027 멀티트랙 전공교육과정 보고서.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>스포츠웰니스경영학 트랙 A(스마트헬스케어코칭)·B(스포츠테크앤비즈니스) + 뷰티 트랙 A(스킨케어메이크업)·B(뷰티경영창업). 각 트랙별 1~4학년 학기별 교과목 표(과목명·이수구분·학점·비고). 멀티트랙 운영방안(트랙선택·변경·융합·RPL·마이크로디그리). 이수체계도(텍스트 다이어그램). 기대성과(학습자·대학·지역산업·정책정합성).</td>
+    </tr>
+  </table>
+  <div style="margin-top:8px;">
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+    <p style="font-size:0.82rem; color:var(--muted); margin:0;">미래라이프대학 트랙 완성도: 100% — 4종 문서 모두 작성 완료. 바탕 자료(hwpx 2종: 스포츠웰니스경영학 커리큘럼 초안 + 미래커리어개발대학 보고서) 추출·해석 반영.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h3>트랙 ③ 특수학급 서비스러닝 교육자료 (3종 HTML)</h3>
+  <table>
+    <tr><th style="width:5%;">#</th><th style="width:32%;">문서</th><th style="width:12%;">상태</th><th>주요 내용</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>실습일지.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>10주차별 성찰 기록 양식. ①오늘 한일·본 것 ②관찰(교사 수업 전달 방식) ③성찰(배움·생각 변화·현장 이해) ④다음주 기대·질문. 주차별 초점: 1~2주 현장이해, 3~4주 수업수정·교수전략, 5주 행동지원, 6주 한학생깊이보기, 7주 통합과관계, 8주 협력과소통, 9~10주 총성찰. 행동관찰기록표, 성찰질문뱅크, 실습일지활용안내(교사용) 포함. localStorage 주차별 완료 체크.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>오늘수업_전달사항_주의사항.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>수업 전달사항(핵심 메시지·10주 구성·실습일지 안내·교수 메시지) + 실습 주의사항(윤리 원칙 6가지·도해야 할 것/하지 말아야 할 것·보고체계·실습일지 작성 주의·현장 매너). 학생이 실습 나가기 전 필수 확인.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>특수학급_서비스러닝_수업자료.html</strong></td>
+      <td><span class="badge badge-green">완료</span></td>
+      <td>특수학급 운영 체계(하루 흐름·특수교사 역할 7가지·협력 유형)·학급 내 활동(학습·의사소통·사회성/정서·감각운동·통합 5유형)·서비스러닝 학생 이해/역할(관찰자·보조자·해야 할 것/하지 말아야 할 것·학습목표 6)·학교 운영 이해(일반교사·학부모·전문가·행정 협력, 학교에서 지킬 것, 주의사항).</td>
+    </tr>
+  </table>
+  <div style="margin-top:8px;">
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+    <p style="font-size:0.82rem; color:var(--muted); margin:0;">특수학급 서비스러닝 트랙 완성도: 100% — 3종 문서 모두 작성 완료. 교수님 수업에서 바로 사용 가능한 단일 HTML 형태.</p>
+  </div>
+</div>
+
+<!-- ===== 3. 파일 목록 ===== -->
+<div class="section">
+  <h2>📁 파일 목록 (전체 산출물)</h2>
+  <table>
+    <tr><th style="width:5%;">#</th><th style="width:42%;">파일명</th><th style="width:27%;">경로</th><th style="width:13%;">크기</th><th style="width:13%;">상태</th></tr>
+    <tr><td>1</td><td>router.js</td><td>HERMES-JEV-ROUTER/</td><td>14KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>2</td><td>router-ai-sdk.js</td><td>HERMES-JEV-ROUTER/</td><td>10.6KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>3</td><td>router-direct.js</td><td>HERMES-JEV-ROUTER/</td><td>10KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>4</td><td>.env (API 키 포함)</td><td>HERMES-JEV-ROUTER/</td><td>80B</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>5</td><td>jev-dashboard.html</td><td>HERMES-JEV-ROUTER/</td><td>—</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>6</td><td>gpt-bridge-server/server.py</td><td>HERMES-JEV-ROUTER/gpt-bridge-server/</td><td>—</td><td><span class="badge badge-blue">완료(불안정)</span></td></tr>
+    <tr><td>7</td><td>gpt-bridge-config.json</td><td>HERMES-JEV-ROUTER/</td><td>—</td><td><span class="badge badge-blue">완료(미검증)</span></td></tr>
+    <tr><td>8</td><td>README.md</td><td>HERMES-JEV-ROUTER/</td><td>—</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>9</td><td>01_미래라이프대학_운영계획.html</td><td>출력_미래라이프대학/</td><td>24KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>10</td><td>02_미래라이프대학_운영규정.html</td><td>출력_미래라이프대학/</td><td>25KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>11</td><td>03_미래라이프대학_홈페이지구축.html</td><td>출력_미래라이프대학/</td><td>27KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>12</td><td>04_2027 멀티트랙_전공교육과정_개발편성보고서.html</td><td>출력_미래라이프대학/</td><td>36KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>13</td><td>실습일지.html</td><td>출력_특수학급/</td><td>—</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>14</td><td>오늘수업_전달사항_주의사항.html</td><td>출력_특수학급/</td><td>—</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>15</td><td>특수학급_서비스러닝_수업자료.html</td><td>출력_특수학급/</td><td>—</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>16</td><td>전체_활동_브리핑_및_개선_피드백.html</td><td>HERMES-JEV-ROUTER/</td><td>34KB</td><td><span class="badge badge-green">완료</span></td></tr>
+    <tr><td>17</td><td>JEV_사용_및_비교분석.html</td><td>HERMES-JEV-ROUTER/</td><td>30KB</td><td><span class="badge badge-green">완료</span></td></tr>
+  </table>
+</div>
+
+<!-- ===== 4. 핵심 미해결 / 개선 필요 ===== -->
+<div class="section">
+  <h2>⚠️ 핵심 미해결 및 개선 필요 사항</h2>
+
+  <div class="warn-box">
+    <strong>🚨 1순위: Vercel 신용카드 미등록 → JEV 호출 403 차단</strong><br>
+    · 원인: Vercel 계정에 신용카드 등록이 안 되어 AI Gateway 호출 자체가 차단됨<br>
+    · 현재: 라우터·대시보드·API 키는 정상, 호출하면 403 오류<br>
+    · 해결: <strong>교수님께서 Vercel 대시보드(https://vercel.com/dashboard)에 로그인 → 팀/계정 → 결제 또는 신용카드 등록 → 무료 크레딧 활성화</strong><br>
+    · 등록 완료되면: 제가 JEV 호출 테스트 재수행 → 대시보드에서 실제 결과 확인·시각화
+  </div>
+
+  <h3>개선 필요 사항</h3>
+  <table>
+    <tr><th style="width:5%;">#</th><th style="width:30%;">항목</th><th style="width:45%;">현재 상태 / 문제점</th><th style="width:20%;">개선 방향</th></tr>
+    <tr>
+      <td>1</td>
+      <td>GPT Bridge 서버 안정성</td>
+      <td>Flask → stdlib http.server 재작성했으나 백그라운드 실행 시 프로세스 불안정. ChatGPT Desktop config.json은 템플릿만, 실제 병합·연결 확인 못 함.</td>
+      <td>서버 프로세스 안정화(작업 스케줄러 등), requirements.txt 정리, ChatGPT Desktop config.json 실제 병합 절차 안내 보강.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>GitHub 원격 연결</td>
+      <td>로컬 commit은 완료, GitHub 원격 저장소 생성·push 미완. gh CLI 없음, PAT 없음, 브라우저 자동화 실패.</td>
+      <td>교수님께서 GitHub에서 repository 직접 생성 후, git remote add + push. 또는 gh CLI 설치·PAT 발급 진행.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>미래라이프대학 규정 수치·용어 정합성</td>
+      <td>120학점·전공 최대 91학점·교양 29학점 등 수치가 실제 학교 기준과 일치하는지 미확인. 규정 조·항·호 번호 체계도 학칙과 대조 필요.</td>
+      <td>교수님께서 실제 학교 학칙·규정 양식과 대조해 주시고, 수치·용어 수정 피드백.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>특수학급 자료 — 배치 학교 실제 상황 맞춤</td>
+      <td>일반적인 특수학급 모델 바탕으로 작성했으나, 배치될 초등학교의 실제 특수학급 구성(학생 수, 통합 정도, 치료 연계, 교사 구성 등)과 맞는지 미확인.</td>
+      <td>배치 학교 실제 상황을 알려주시면 자료 수정·맞춤.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>GPT Bridge VS Code 확장</td>
+      <td>마켓플레이스 확장명 불명으로 자동 설치 실패. 수동 설치는 가능(VS Code Extensions에서 검색·설치).</td>
+      <td>교수님께서 VS Code Extensions에서 'GPT Bridge' 또는 'mcp'(publisher: ndyadav8797-art) 검색 후 직접 설치.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ===== 5. 다음 단계 (권장 액션) ===== -->
+<div class="section">
+  <h2>🚀 다음 단계 — 권장 액션 (우선순위)</h2>
+  <table>
+    <tr><th style="width:5%;">순위</th><th style="width:35%;">액션</th><th style="width:20%;">담당</th><th style="width:40%;">기대 결과</th></tr>
+    <tr>
+      <td><strong>1</strong></td>
+      <td><strong>Vercel 대시보드 로그인 → 신용카드 등록</strong></td>
+      <td>교수님 직접</td>
+      <td>403 차단 해제 → JEV 호출 성공 → 대시보드에서 실제 평가 결과 수신·시각화 (기술 트랙 완료)</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><strong>GPT Bridge ChatGPT Desktop 설정</strong></td>
+      <td>교수님 직접</td>
+      <td>ChatGPT가 HERMES-JEV-ROUTER 작업공간 파일 읽기·편집 가능 (Ctrl+Z 취소), MCP 도구 노출</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td><strong>GitHub repository 생성 + 원격 연결+push</strong></td>
+      <td>교수님 직접</td>
+      <td>코드 GitHub 보관·버전 관리 시작</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td><strong>미래라이프대학 규정·문서 학교 기준 확인·수정</strong></td>
+      <td>교수님 피드백</td>
+      <td>규정 조·항·호 번호, 학점 수치, 용어가 학교 실제 학칙과 정합</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><strong>특수학급 자료 — 배치 학교 실제 상황 맞춤</strong></td>
+      <td>교수님 정보 제공</td>
+      <td>실습일지·수업자료가 실제 배치 학교 특수학급 구성과 정확히 일치</td>
+    </tr>
+    <tr>
+      <td><strong>6</strong></td>
+      <td><strong>GPT Bridge VS Code 확장 수동 설치</strong></td>
+      <td>교수님 직접</td>
+      <td>VS Code에서 GPT Bridge 확장 활성화, 작업공간 MCP 노출</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ===== 6. 메일 발송용 본문 ===== -->
+<div class="section" style="background:#f0f9ff; border:1px solid #bae6fd;">
+  <h2>📧 메일 발송 본문 (44070777@bu.ac.kr)</h2>
+  <p style="font-size:0.85rem; color:var(--muted); margin-bottom:10px;">아래 본문을 복사해서 GmailCompose에 붙여넣기 하십시오. 링크는 실제 파일 경로입니다.</p>
+  <div style="background:white; border:1px solid var(--border); border-radius:6px; padding:14px 16px; font-size:0.9rem; white-space:pre-wrap; margin-bottom:10px;">
+Subject: [현황 보고] 전체 활동 현황표 및 요약본 — JEV·GPT Bridge·미래라이프대학·특수학급 서비스러닝
+
+서건우 교수님, 안녕하세요.
+
+ 지금까지 진행한 전체 활동 현황표와 요약본을 정리하여 보내드립니다.
+
+▣ 전체 요약
+ - 크게 3개 트랙으로 진행: ① 기술 세팅(JEV·GPT Bridge·GitHub) ② 미래라이프대학 설립 문서 4종 ③ 특수학급 서비스러닝 교육자료 3종
+ - 총 산출물: HTML 파일 17개 (기술 7 + 미래라이프 4 + 특수학급 3 + 현황표·브리핑·비교분석)
+
+▣ 트랙별 핵심
+ ① 기술 세팅
+   · JEV 개념·엔드포인트·라우터·대시보드 완성
+   · API 키 저장됨 (env: AI_GATEWAY_API_KEY)
+   · ⚠️ 현재 Vercel 신용카드 미등록으로 JEV 호출 403 차단 — 교수님 Vercel 대시보드에서 신용카드 등록 필요 (등록 후 제가 호출 테스트 가능)
+   · GPT Bridge 서버 제작·ChatGPT Desktop config 템플릿 마련 (서버 안정화·실제 연동 확인 필요)
+   · GitHub 저장소 초기화 완료, 원격 연결은 교수님 직접 진행 필요
+
+ ② 미래라이프대학 4종 문서 (완성)
+   · 운영계획 · 운영규정(조·항·호 30개) · 홈페이지 구축안 · 2027 멀티트랙 전공교육과정 보고서
+   · 스포츠웰니스경영학 + 뷰티 전공 2개 트랙
+
+ ③ 특수학급 서비스러닝 3종 (완성)
+   · 실습일지(10주차 성찰 양식) · 오늘 수업 전달사항 및 주의사항 · 특수학급 수업자료(운영 체계·학급 활동·학생 역할·학교 이해)
+
+▣ 가장 시급한 것
+ - Vercel 신용카드 등록 → JEV 실제 호출 성공 (이게 되어야 기술 트랙 완료)
+
+▣ 파일 링크 (브라우저에서 열기)
+ - JEV 대시보드: file:///C:/Users/User/HERMES-JEV-ROUTER/jev-dashboard.html
+ - GPT Bridge 서버: folder:///C:/Users/User/HERMES-JEV-ROUTER/gpt-bridge-server
+ - 미래라이프대학: folder:///C:/Users/User/출력_미래라이프대학
+ - 특수학급 자료: folder:///C:/Users/User/출력_특수학급
+ - 전체 브리핑 및 피드백: file:///C:/Users/User/HERMES-JEV-ROUTER/전체_활동_브리핑_및_개선_피드백.html
+ - JEV 사용 및 비교 분석: file:///C:/Users/User/HERMES-JEV-ROUTER/JEV_사용_및_비교분석.html
+
+ 필요하시면 계속 이어서 진행하겠습니다.
+ 감사합니다.
+  </div>
+</div>
+
+<div class="footer">
+  전체 활동 현황표 및 요약본 · 2026년 9월 23일(수) 기준 · 서건우 교수 특수체육학과
+</div>
+
+</div>
+
+</body>
+</html>

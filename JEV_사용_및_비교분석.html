@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEV 사용 및 비교 분석 — 판단 전용 AI를 이해하고 활용하기</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --primary2: #2563eb;
+    --secondary: #2d6a4f;
+    --accent: #e07a2c;
+    --purple: #6c5ce7;
+    --warn: #dc2626;
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 950px; margin: 0 auto; padding: 20px; }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+    color: white; padding: 28px 32px; border-radius: var(--radius);
+    margin-bottom: 20px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; right: -50px; bottom: -50px;
+    width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%;
+  }
+  .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; position: relative; }
+  .header .subtitle { color: rgba(255,255,255,0.85); font-size: 0.9rem; position: relative; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-size: 1.1rem; color: var(--primary); margin-bottom: 12px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--primary);
+  }
+  .card h3 { font-size: 0.95rem; color: var(--secondary); margin: 12px 0 6px; }
+
+  .info-box {
+    background: #eff6ff; border-left: 4px solid var(--primary2);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem;
+  }
+  .tip-box {
+    background: #f0fdf4; border-left: 4px solid var(--secondary);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem;
+  }
+  .warn-box {
+    background: #fef2f2; border-left: 4px solid var(--warn);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem;
+  }
+  .highlight-box {
+    background: #fffbeb; border-left: 4px solid var(--accent);
+    padding: 12px 16px; margin: 10px 0; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem;
+  }
+
+  p { margin-bottom: 6px; }
+  ul, ol { margin: 0 0 10px 22px; }
+  li { margin-bottom: 3px; }
+
+  /* 비교 테이블 */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9rem; }
+  table th { background: var(--primary); color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+  table td { padding: 8px 10px; border: 1px solid var(--border); vertical-align: top; }
+  table tr:nth-child(even) td { background: #f8fafc; }
+
+  /* JEV vs LLM 비교 매트릭스 - 컬러 코딩 */
+  .compare-table th:first-child { width: 22%; }
+  .compare-table td.cell-yes { background: #f0fdf4; color: var(--secondary); font-weight: 600; text-align: center; }
+  .compare-table td.cell-no { background: #fef2f2; color: var(--warn); font-weight: 600; text-align: center; }
+  .compare-table td.cell-partial { background: #fffbeb; color: var(--accent); font-weight: 600; text-align: center; }
+  .compare-table td.cell-info { text-align: center; font-size: 0.85rem; }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 0.7rem; font-weight: 700; margin-right: 4px;
+  }
+  .badge.green { background: var(--secondary); color: white; }
+  .badge.blue { background: var(--primary2); color: white; }
+  .badge.orange { background: var(--accent); color: white; }
+  .badge.red { background: var(--warn); color: white; }
+  .badge.purple { background: var(--purple); color: white; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .footer {
+    text-align: center; padding: 16px;
+    color: var(--muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border); margin-top: 20px;
+  }
+
+  @media (max-width: 700px) {
+    .container { padding: 12px; }
+    .header { padding: 20px; }
+    .header h1 { font-size: 1.2rem; }
+    .card { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>🔍 JEV 사용 및 비교 분석</h1>
+  <div class="subtitle">판단 전용 AI JEV의 이해 · 사용 방법 · LLM/전통적 의사결정 도구와 비교 · 실제 활용 시나리오 · 한계와 보완</div>
+</div>
+
+<!-- ===== 1. JEV 한 줄 요약 ===== -->
+<div class="card">
+  <h2><span class="icon">🎯</span> JEV란 무엇인가 — 한 줄 요약</h2>
+
+  <div class="highlight-box" style="font-size: 1rem;">
+    <strong>JEV = 판단이 필요한 순간에, 선택지 중에서 가장 나은 결정을 확률·confidence와 함께 내려주는 "판단 전용 AI"</strong><br><br>
+    LLM(GPT-4, Claude, Gemini 등)이 <strong>"텍스트를 생성하고 답변하는 AI"</strong>라면, JEV는 <strong>"여러 선택지를 보고 판단을 내리는 AI"</strong>입니다. 문장을 길게 생성하지 않고, boolean(예/아니오)·choice(선택)·score(점수)로 답을 줍니다.
+  </div>
+
+  <table>
+    <tr><th style="width:30%;">구분</th><th>JEV</th></tr>
+    <tr><td><strong>핵심 역할</strong></td><td>판단·의사결정 — 주어진 state(상태)와 questions(질문)에 대해 가장 적절한 판단 반환</td></tr>
+    <tr><td><strong>출력 형태</strong></td><td>boolean(예/아니오), choice(여러 선택지 중 하나), score(점수·수준) — 텍스트 장문 생성 아님</td></tr>
+    <tr><td><strong>입력</strong></td><td>state(현재 상황·맥락 정보) + questions(판단할 질문들, 타입 지정)</td></tr>
+    <tr><td><strong>결과</strong></td><td>각 질문에 대한 판단 값 + probability(확률) + confidence(확신 정도)</td></tr>
+    <tr><td><strong>강점</strong></td><td>여러 질문을 병렬(fan-out)로 동시에 평가 가능, 확률·confidence로 판단의 투명도 확보, 상태(state) 기반으로 맥락 유지</td></tr>
+    <tr><td><strong>한계</strong></td><td>장문의 설명·창의적 텍스트 생성에는 부적합, 학습에 사용된 데이터에 기반하므로 최신 정보나 매우 특수한 맥락에 약할 수 있음</td></tr>
+  </table>
+</div>
+
+<!-- ===== 2. JEV vs LLM 비교 ===== -->
+<div class="card">
+  <h2><span class="icon">⚖️</span> JEV vs LLM (GPT-4·Claude·Gemini 등) — 비교 분석</h2>
+
+  <p style="margin-bottom:12px;">아래 표는 JEV와 범용 LLM을 비교한 것입니다. <strong>두 AI는 서로 대체하는 관계가 아니라, 역할이 다르고 서로 보완</strong>할 수 있습니다.</p>
+
+  <table class="compare-table">
+    <tr>
+      <th>비교 항목</th>
+      <th>JEV (판단 전용 AI)</th>
+      <th>범용 LLM (GPT-4, Claude, Gemini 등)</th>
+    </tr>
+    <tr>
+      <td><strong>주 목적</strong></td>
+      <td class="cell-yes">판단·의사결정</td>
+      <td class="cell-no">텍스트 생성·대화·작문·요약·코딩·번역 등</td>
+    </tr>
+    <tr>
+      <td><strong>출력</strong></td>
+      <td class="cell-yes">boolean / choice / score + probability·confidence</td>
+      <td class="cell-no">자유 텍스트 (장문 생성 가능)</td>
+    </tr>
+    <tr>
+      <td><strong>판단 투명성</strong></td>
+      <td class="cell-yes">각 질문에 probability·confidence 제공 → 왜 이 판단인지 확률로 투명</td>
+      <td class="cell-partial">추론 과정(chain of thought) 볼 수는 있으나, 확률·confidence 직접 제공은 일반적이지 않음</td>
+    </tr>
+    <tr>
+      <td><strong>상태(state) 유지</strong></td>
+      <td class="cell-yes">state 객체를 입력하여 맥락 유지, 질문들 간 일관된 판단 가능</td>
+      <td class="cell-partial">대화 context로 유사 기능 가능하나, 구조화된 state 기반 판단은 아님</td>
+    </tr>
+    <tr>
+      <td><strong>병렬 평가 (fan-out)</strong></td>
+      <td class="cell-yes">여러 질문을 동시에(c simultaneously) 평가 가능, 각 질문 독립 판단</td>
+      <td class="cell-no">대화형으로 순차 처리 — 병렬 판단 구조로는 설계 필요</td>
+    </tr>
+    <tr>
+      <td><strong>텍스트 생성</strong></td>
+      <td class="cell-no">주 목적 아님 (짧게 설명 가능하나 장문 생성용 아님)</td>
+      <td class="cell-yes">주 목적 — 에세이·메일·코드·요약 등 장문 생성</td>
+    </tr>
+    <tr>
+      <td><strong>창의성</strong></td>
+      <td class="cell-no">판단 중심 — 창의적 글쓰기에는 부적합</td>
+      <td class="cell-yes">창의적 텍스트·아이디어 생성에 강점</td>
+    </tr>
+    <tr>
+      <td><strong>일관성</strong></td>
+      <td class="cell-yes">구조화된 질문·state 기반으로 일관된 판단 가능, 확률·confidence로 확인</td>
+      <td class="cell-partial">프롬프트에 따라 일관성 달라짐, 동일 질문에 다른 답변 가능</td>
+    </tr>
+    <tr>
+      <td><strong>적합 사용처</strong></td>
+      <td class="cell-yes">의사결정, 우선순위 판단, yes/no 결정, 선택지 평가, 점수 부여, 플래그 판단</td>
+      <td class="cell-yes">글쓰기, 요약, 코딩, 번역, 질의응답, 아이디어 브레인스토밍, 장문 생성</td>
+    </tr>
+    <tr>
+      <td><strong>예시 질문</strong></td>
+      <td class="cell-info">"이 업무가 오늘 처리되지 않으면 24시간 이상 지연되는가?" → true/false + p<br>"이 3개 선택지 중 가장 우선순위 높은 것은?" → choice + p<br>"현재 에너지 수준은?" → score(1~5) + p</td>
+      <td class="cell-info">"이 상황을 3문장으로 설명해줘" "이메일 초안 써줘" "이 코드 버그 원인 찾아줘" "이 개념 쉽게 설명해줘"</td>
+    </tr>
+  </table>
+
+  <div class="info-box" style="margin-top:12px;">
+    <strong>🔑 핵심 인사이트</strong><br>
+    JEV와 LLM은 <strong>대체재가 아니라 보완재</strong>입니다.<br>
+    · <strong>JEV</strong>: "이 상황에서 무엇이 맞는지, 우선순위는 무엇인지, 이 선택지는 타당한지"를 <strong>판단</strong>할 때<br>
+    · <strong>LLM</strong>: "이 상황을 설명하거나, 글을 쓰거나, 아이디어를 내거나, 코드를 짜거나, 요약할 때"<br><br>
+    실제 워크플로우에서는 <strong>LLM이 초안을 만들고 → JEV가 그 초안에 대해 판단·평가를 내리는</strong> 식으로 함께 쓸 수 있습니다.
+  </div>
+</div>
+
+<!-- ===== 3. JEV vs 전통적 의사결정 도구 (프로コンリスト·의사결정 행렬 등) ===== -->
+<div class="card">
+  <h2><span class="icon">📊</span> JEV vs 전통적 의사결정 도구 — 비교</h2>
+
+  <p style="margin-bottom:12px;">LLM 등장 이전에도 인간은 다양한 의사결정 도구를 사용했습니다. JEV는 이 전통적 도구들과 비교할 때도 <strong>장단점이 뚜렷</strong>합니다.</p>
+
+  <table>
+    <tr><th style="width:25%;">도구</th><th>방식</th><th>장점</th><th>단점</th><th>JEV와 비교</th></tr>
+    <tr>
+      <td><strong>프로·콘 리스트 (Pros/Cons)</strong></td>
+      <td>장점과 단점을 나열하여 비교</td>
+      <td>단순·직관적, 빠르게 작성, 누구나 이해</td>
+      <td> 주관적·정성적, 가중치 반영 어려움, 판단이 모호할 때 결론 내리기 힘듦</td>
+      <td>JEV는 프로·콘을 스스로 나열하지는 않지만, <strong>질문과 state를 주면 probabilistically 판단</strong>. 프로·콘을 LLM으로 생성한 뒤 JEV로 평가 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>의사결정 행렬 (Decision Matrix)</strong></td>
+      <td>기준별 점수·가중치를 매겨 총점 비교</td>
+      <td>구조화된 비교, 기준 명확화, 점수화</td>
+      <td>기준·가중치 설정에 주관 개입, 점수 부여의 일관성 문제</td>
+      <td>JEV는 <strong>점수(score) 질문과 confidence</strong>를 직접 제공. 의사결정 행렬의 "점수 부여" 역할을 JEV가 일부 대체 가능. 기준에 대한 판단은 사람이 하고, JEV가 그 판단을 보조.</td>
+    </tr>
+    <tr>
+      <td><strong>SWOT 분석</strong></td>
+      <td>강점·약점·기회·위협 4가지 관점 분석</td>
+      <td>전략적 시각 제공, 구조화된 분석 프레임</td>
+      <td>정성적·해석 의존, 분석 후 "그래서 뭘 할 것인가" 판단이 별도로 필요</td>
+      <td>JEV는 SWOT 분석 자체를 대신해 주지는 않지만, <strong>SWOT 이후 "이 상황에서 가장 시급한 행동은?" 같은 판단 질문</strong>을 던지는 용도로 활용 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>의사결정 나무 (Decision Tree)</strong></td>
+      <td>선택지별 분기·결과를 나무 구조로 시각화</td>
+      <td>선택지와 결과를 구조적으로 볼 수 있음, 기대값 계산 가능</td>
+      <td>나무 설계·확률 추정에 사람 판단 개입, 복잡해지면 작성 부담</td>
+      <td>JEV는 <strong>확률(probabilistic) 판단</strong>을 제공한다는 점에서 의사결정 나무의 "확률 추정" 역할을 일부 보조. 나무 구조 자체는 사람이 설계하고 JEV가 각 분기점 판단에 기여 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>직관·경험</strong></td>
+      <td>사람의 직관과 경험에 기반한 판단</td>
+      <td>빠름, 맥락·암묵지 반영, 복합적 요소 동시 고려</td>
+      <td>편향(bias) 위험, 일관성 부족, 설명 어려움, 피로·감정 영향</td>
+      <td>JEV는 <strong>확률과 confidence로 판단의 근거를 조금이나마 객관화</strong>. 사람의 직관을 대체하기보다, <strong>직관에 대한 "두 번째 의견" 또는 "확인 질문"</strong>으로 활용 가능.</td>
+    </tr>
+  </table>
+
+  <div class="tip-box" style="margin-top:12px;">
+    <strong>🔑 전통적 도구 vs JEV 결론</strong><br>
+    전통적 의사결정 도구는 <strong>사람 중심·구조화·해석</strong>에 강점이 있고, JEV는 <strong>확률·confidence·병렬 평가·구조화된 질문 기반 일관성</strong>에 강점이 있습니다.<br>
+    가장 좋은 사용법은 <strong>전통적 도구로 분석 프레임을 잡고 → JEV에게 판단 질문을 던져 probability·confidence를 확인 → 사람이 최종 결정</strong>하는 협업 구조입니다.
+  </div>
+</div>
+
+<!-- ===== 4. JEV 사용 방법 (실무) ===== -->
+<div class="card">
+  <h2><span class="icon">🛠</span> JEV 사용 방법 — 실무에서 쓰는 법</h2>
+
+  <h3>4-1. 기본 호출 구조</h3>
+  <table>
+    <tr><th style="width:25%;">요소</th><th>설명</th></tr>
+    <tr><td><strong>Endpoint</strong></td><td>`https://ai-gateway.vercel.sh/v1/evaluate` (Vercel AI Gateway)</td></tr>
+    <tr><td><strong>Method</strong></td><td>POST</td></tr>
+    <tr><td><strong>Headers</strong></td><td>`Authorization: Bearer <API_KEY>`, `Provider: typesafe-ai`, `Content-Type: application/json`</td></tr>
+    <tr><td><strong>Body</strong></td><td>`model: "typesafe-ai/jev"`, `state: {...}`, `questions: {...}`</td></tr>
+  </table>
+
+  <h3>4-2. 질문 타입 3가지</h3>
+  <table>
+    <tr><th style="width:15%;">타입</th><th style="width:25%;">형식</th><th>예시</th><th>결과</th></tr>
+    <tr>
+      <td><strong>boolean</strong></td>
+      <td>예/아니오 판단</td>
+      <td>"오늘 처리하지 않으면 24시간 이상 지연되는 업무인가?"</td>
+      <td>`true` 또는 `false` + probability + confidence</td>
+    </tr>
+    <tr>
+      <td><strong>choice</strong></td>
+      <td>여러 선택지 중 하나를 고름</td>
+      <td>"현재 가장 우선순위가 높은 활동은? [A: 강의준비, B: 논문교정, C: 회의참석]"</td>
+      <td>선택지 중 하나 + probability + confidence</td>
+    </tr>
+    <tr>
+      <td><strong>score</strong></td>
+      <td>점수·수준을 매김</td>
+      <td>"현재 에너지·컨디션 수준은? [매우낮음, 낮음, 보통, 높음, 매우높음]"</td>
+      <td>선택된 수준 + probability + confidence</td>
+    </tr>
+  </table>
+
+  <h3>4-3. state(상태) 설계 팁</h3>
+  <ul>
+    <li><strong>맥락을 충분히 담는다</strong> — 날짜, 현재 진행 중인 업무, 스케쥴, 우선순위, 자원 상태 등 판단에 필요한 정보를 state에 포함.</li>
+    <li><strong>구조화된 객체</strong> — 문자열보다 객체(object)로 구성하는 것이 JEV가 맥락을 이해하는 데 유리. (예: `{ tasks: [...], schedule: [...], currentLoad: "높음" }`)</li>
+    <li><strong>질문과 state 일관성</strong> — 질문이 state의 정보를 참조하도록 설계. (예: state에 "오늘 마감 급한 업무"가 있으면, 질문도 그걸 기준으로 판단)</li>
+    <li><strong>질문은 간결하게</strong> — JEV는 "텍스트 생성"이 아니라 "판단"이 주 역할. 질문은 명확하게, 답변 타입은 명확히 지정.</li>
+  </ul>
+
+  <h3>4-4. fan-out (병렬 평가) 활용</h3>
+  <ul>
+    <li><strong>여러 질문을 한 번에</strong> — body의 questions 객체에 여러 질문을 함께 보내면 각각 독립적으로 판단. (boolean 5개 + choice 2개 + score 1개 동시 가능)</li>
+    <li><strong>도메인별로 묶기</strong> — 예: ADMIN_관련 질문 5개, CLASS_관련 질문 4개, RESEARCH_관련 질문 4개 … 이런 식으로 6개 영역의 질문을 state와 함께 한 번에 평가.</li>
+    <li><strong>확률·confidence로 필터링</strong> — probability가 낮은 판단은 "확신이 낮은 판단"으로 보고, 사람이 다시 검토하거나 추가 state 정보를 보강.</li>
+  </ul>
+
+  <h3>4-5. 결과 해석과 활용</h3>
+  <ul>
+    <li><strong>probability</strong> — JEV가 그 판단을 내릴 확률. 0.85면 "이 판단의 신뢰도 약 85%"로 해석.</li>
+    <li><strong>confidence</strong> — 판단 자체의 확신 정도. probability와 함께 판단의 질을 보는 지표.</li>
+    <li><strong>낮은 probability → 재질문 또는 state 보강</strong> — 확률이 낮은 판단은 state 정보가 부족하거나 질문이 모호할 가능성. 질문을 다듬거나 state에 정보를 추가해 다시 평가.</li>
+    <li><strong>판단 결과를 행동 연결</strong> — boolean true → "처리해야 할 긴급 업무"로 분류, choice 결과 → "선택한 행동으로 이동", score 결과 → "컨디션 고려한 일정 조정" 등.</li>
+  </ul>
+</div>
+
+<!-- ===== 5. 실제 활용 시나리오 ===== -->
+<div class="card">
+  <h2><span class="icon">📱</span> 실제 활용 시나리오 — 교수님께 적용 예시</h2>
+
+  <div class="two-col">
+    <div class="card" style="margin:0;">
+      <h3>시나리오 1: 아침 브리핑 + 오늘 판단</h4>
+      <p><strong>상황</strong>: 출근 후 오늘 일정·할 일·진행 중인 업무를 state로 넣고, 6개 영역(ADMIN·CLASS·RESEARCH·HUMANITAS·CONTENT·PERSONAL)에 걸친 29개 질문을 JEV에 한 번에 보냄.</p>
+      <p><strong>state 예시</strong>:</p>
+      <pre>{
+  "date": "2026-10-06",
+  "schedule": [
+    { "event": "우석대 특강", "date": "10/6", "status": "준비중" }
+  ],
+  "pendingTasks": [
+    { "task": "아침 브리핑 발송", "urgency": "높음" }
+  ],
+  "currentLoad": "높음"
+}</pre>
+      <p><strong>질문 예시</strong>:</p>
+      <ul>
+        <li>ADMIN_urgency: "오늘 처리하지 않으면 24시간 이상 지연되는 업무가 있는가?" → true/false</li>
+        <li>CLASS_classReady: "오늘 수업이 준비 완료 상태인가?" → true/false</li>
+        <li>RESEARCH_deadlineCritical: "마감 임박(48시간 이내) 연구 업무가 있는가?" → true/false</li>
+        <li>priority_pick: "현재 가장 우선순위가 높은 활동은? [A: 브리핑, B: 특강준비, C: 논문교정]" → choice</li>
+        <li>energyLevel: "현재 에너지 수준은?" → score</li>
+      </ul>
+      <p><strong>결과 활용</strong>: JEV 결과를 보고 오늘 우선순위를 정하고, probability 낮은 판단은 추가 확인.</p>
+    </div>
+    <div class="card" style="margin:0;">
+      <h3>시나리오 2: 연구 논문 수정 방향 판단</h3>
+      <p><strong>상황</strong>: JER 논문 Major revision(10/9 마감) 수정 중인 상태. 현재 수정 진행 상황, 남은 작업, 마감 압박을 state로 넣고 연구 관련 판단을 JEV에 질문.</p>
+      <p><strong>질문 예시</strong>:</p>
+      <ul>
+        <li>RESEARCH_deadlineCritical: "마감(10/9)까지 48시간 이내인가?" → true/false</li>
+        <li>REVISION_direction: "현재 수정 방향? [진행, 보류, 재검토]" → choice</li>
+        <li>REVISION_aiAssisted: "초안·교정·참고문헌 대조를 AI로 보조 가능한가?" → true/false</li>
+        <li>REVISION_humanReview: "연구 내용·인용·데이터 해석은 교수 확인이 반드시 필요한가?" → true/false</li>
+      </ul>
+      <p><strong>결과 활용</strong>: true/false + probability로 "지금 당장 손써야 할 부분"과 "사람 검토가 반드시 필요한 부분"을 구분.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>시나리오 3: LLM + JEV 협업 — 초안 생성 → 판단 평가</h3>
+    <p><strong>상황</strong>: GPT-4(또는 Claude 등 LLM)로 아침 브리핑 메일 초안을 생성한 뒤, 그 초안에 대해 JEV가 판단 질문을 던지는 워크플로우.</p>
+    <p><strong>흐름</strong>:</p>
+    <ol>
+      <li><strong>LLM</strong>: 오늘 일정과 할 일을 바탕으로 브리핑 메일 초안 생성 (텍스트 생성)</li>
+      <li><strong>사람</strong>: 초안을 검토하고, "이 초안에 대해 몇 가지 판단할 게 있다"며 JEV 질문 구성</li>
+      <li><strong>JEV</strong>: "이 초안이 오늘 반드시 보내야 하는 내용인가?" / "누락된 긴급 정보가 있는가?" / " tone이 적절한가?" 등 boolean/choice 질문 평가</li>
+      <li><strong>사람</strong>: JEV의 probability·confidence를 참고하여 최종 수정·발송 결정</li>
+    </ol>
+    <p><strong>가치</strong>: <strong>LLM은 "글을 쓰고", JEV는 "그 글/상황을 판단"</strong>하는 협업. LLM만으로는 판단이 애매할 때 JEV의 probability·confidence가 "두 번째 의견" 역할을 함.</p>
+  </div>
+</div>
+
+<!-- ===== 6. JEV 한계와 보완 ===== -->
+<div class="card">
+  <h2><span class="icon">⚠️</span> JEV의 한계와 보완 — 솔직하게 알아야 할 것</h2>
+
+  <div class="warn-box">
+    <strong>JEV는 만능 판단 머신이 아닙니다.</strong> 아래 한계를 알고 써야 오남용을 피할 수 있습니다.
+  </div>
+
+  <table>
+    <tr><th style="width:25%;">한계</th><th>내용</th><th>보완 방법</th></tr>
+    <tr>
+      <td><strong>텍스트 생성 능력 제한</strong></td>
+      <td>JEV는 장문의 설명·창의적 글쓰기를 주 목적으로 하지 않음. "왜 이런 판단을 했는지" 장문 설명은 LLM에 비해 약함.</td>
+      <td>판단 결과의 맥락을 설명하는 작업은 <strong>LLM과 협업</strong>. JEV가 boolean/choice/score로 판단 → LLM이 그 판단을 설명·정리.</td>
+    </tr>
+    <tr>
+      <td><strong>판단 품질은 state와 질문에 의존</strong></td>
+      <td>state가 불충분하거나 질문이 모호하면 판단 품질 하락. probability 낮을 수 있음.</td>
+      <td>state를 충분히 구조화, 질문은 명확하게. probability 낮은 판단은 <strong>재검토·재질문·state 보강</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>학습 데이터에 기반한 판단</strong></td>
+      <td>JEV의 판단은 학습된 패턴과 데이터에 기반. 매우 특수하거나 최신 정보가 필요한 맥락에서는 약할 수 있음.</td>
+      <td>최신·특수 맥락은 <strong>사람이 직접 판단하거나 LLM으로 정보 보완</strong>. JEV를 "참조 의견"으로 활용.</td>
+    </tr>
+    <tr>
+      <td><strong>확률·confidence가 "진실"은 아님</strong></td>
+      <td>probability 0.9라도 틀릴 수 있음. confidence 높다고 항상 옳은 판단은 아님.</td>
+      <td>JEV 결과를 <strong>참조 의견(두 번째 의견)</strong>으로 보고, 중요 결정은 사람이 최종 확인. 확률·confidence는 투명도 도구일 뿐 절대적 진실 아님.</td>
+    </tr>
+    <tr>
+      <td><strong>도메인 특화 판단 한계</strong></td>
+      <td>교육·연구·의료·법률 등 고도의 전문성이 필요한 판단은 JEV 단독으로는 부족.</td>
+      <td>전문 판단이 필요한 영역은 <strong>사람 전문가 + LLM 정보 보완 + JEV 확인 질문</strong> 조합. JEV는 보조.</td>
+    </tr>
+    <tr>
+      <td><strong>연결 환경 의존 (현재 사례)</strong></td>
+      <td>Vercel AI Gateway를 통해 호출하는 구조. 계정 신용카드 미등록 등으로 호출 자체가 차단될 수 있음 (현재 우리 사례).</td>
+      <td>연결 환경(최신 API 키, 계정 상태, 엔드포인트)을 정기 확인. 호출 실패 시 원인을 "코드 문제" vs "연결/계정 문제"로 구분.</td>
+    </tr>
+  </table>
+
+  <div class="tip-box" style="margin-top:12px;">
+    <strong>🔑 JEV를 잘 쓰는 사람의 태도</strong><br>
+    · JEV를 <strong>"항상 맞는 답"을 주는 기계가 아니라, 판단의 투명도(probability·confidence)를 보여주는 도구</strong>로 이해한다.<br>
+    · <strong>state 설계와 질문 설계가 판단 품질을 좌우</strong>한다는 것을 알고, 이 부분에 신경 쓴다.<br>
+    · <strong>중요한 결정은 사람 최종 확인</strong>. JEV는 참조 의견, 특히 probability·confidence로 "이 판단은 확신이 이 정도구나"를 보는 용도.<br>
+    · <strong>LLM과 JEV를 협업</strong>시켜, LLM의 텍스트 생성력 + JEV의 판단·확률 투명성을 함께 활용한다.
+  </div>
+</div>
+
+<!-- ===== 7. 한눈에 비교 요약표 ===== -->
+<div class="card">
+  <h2><span class="icon">📋</span> 한눈에 비교 — JEV vs LLM vs 전통 도구 vs 사람 직관</h2>
+
+  <table>
+    <tr><th style="width:18%;">구분</th><th>강점</th><th>약점</th><th>적합 용도</th></tr>
+    <tr>
+      <td><strong>JEV</strong><br>(판단 전용 AI)</td>
+      <td>probability·confidence 투명도, 병렬 평가(fan-out), 구조화된 질문·state 기반 일관성, boolean/choice/score 명확 출력</td>
+      <td>장문 텍스트 생성 약함, 상태·질문 의존, 학습 데이터 기반 한계, 연결 환경 의존</td>
+      <td>우선순위 판단, yes/no 결정, 선택지 평가, 점수 부여, 플래그 판단, "두 번째 의견" 확인</td>
+    </tr>
+    <tr>
+      <td><strong>범용 LLM</strong><br>(GPT-4, Claude, Gemini 등)</td>
+      <td>장문 생성·작문·요약·코딩·번역·질의응답·아이디어 브레인스토밍, 대화형 상호작용</td>
+      <td>확률·confidence 직접 제공 일반적이지 않음, 동일 질문 다른 답변 가능, 판단 일관성 설계에 의존, hallucination 위험</td>
+      <td>글쓰기, 요약, 코딩, 번역, 설명, 브레인스토밍, 초안 생성, 정보 제공</td>
+    </tr>
+    <tr>
+      <td><strong>전통 의사결정 도구</strong><br>(프로·콘, 의사결정행렬, SWOT, 의사결정나무 등)</td>
+      <td>구조화·기준 명확화·시각화, 사람 중심 해석, 전략적 프레임</td>
+      <td>주관·가중치 설정 개입, 점수·확률 추정에 사람 판단, 분석 후 판단이 별도로 필요, 작성 부담</td>
+      <td>분석 프레임 잡기, 기준 명확화, 구조화된 비교, 전략 시각 확보</td>
+    </tr>
+    <tr>
+      <td><strong>사람 직관·경험</strong></td>
+      <td>빠른 판단, 맥락·암묵지 반영, 복합 요소 동시 고려, 유연성</td>
+      <td>편향 위험, 일관성 부족, 설명 어려움, 피로·감정 영향, "왜 그렇게 판단했는지" 객관화 어려움</td>
+      <td>신속한 현장 판단, 복합 상황 대처, 경험 기반 의사결정, 암묵지 활용</td>
+    </tr>
+  </table>
+
+  <div class="highlight-box" style="margin-top:12px; font-size: 0.95rem;">
+    <strong>👉 추천 워크플로우 (통합)</strong><br>
+    1. <strong>사람</strong>이 상황을 파악, 분석 프레임(전통 도구) 잡기<br>
+    2. <strong>LLM</strong>이 초안·설명·정보 생성 (글/요약/아이디어)<br>
+    3. <strong>JEV</strong>가 판단 질문(boolean/choice/score)에 대해 probability·confidence 제공 — "두 번째 의견"<br>
+    4. <strong>사람</strong>이 JEV 결과 + LLM 결과 + 자신의 판단 종합 → 최종 결정<br>
+    → 각각 단독보다 <strong>함께 쓸 때 시너지</strong>.
+  </div>
+</div>
+
+<div class="footer">
+  <p>JEV 사용 및 비교 분석 | 판단 전용 AI JEV 이해 · 사용 방법 · LLM/전통 도구/사람 직관과 비교 · 활용 시나리오 · 한계와 보완</p>
+  <p>참고: JEV 호출은 Vercel AI Gateway(`ai-gateway.vercel.sh/v1/evaluate`, 모델 `typesafe-ai/jev`) 경유. API 키·계정 상태에 따라 호출 가능 여부 달라짐.</p>
+</div>
+
+</div>
+
+</body>
+</html>

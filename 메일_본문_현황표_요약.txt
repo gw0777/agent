@@ -1,0 +1,20 @@
+서건우 교수님,
+
+지금까지 진행한 전체 활동 현황표와 요약본입니다.
+
+▣ 파일 경로
+→ 전체 현황표 및 요약본 HTML
+file:///C:/Users/User/HERMES-JEV-ROUTER/전체_현황표_및_요약본.html
+
+▣ JEV 연결
+· Vercel AI Gateway 연결 성공 (200 OK)
+· 키: vck_0wIV..., 카드 등록 완료
+
+▣ 해결됨
+· JEV 연결 문제 해결
+· GPT Bridge 서버 안정화
+
+▣ 미해결
+· GitHub 원격 저장소 연결 (PAT 필요)
+· 이메일 실제 발송 (앱 비밀번호 필요)
+· CloBe MCP 연동 설정
