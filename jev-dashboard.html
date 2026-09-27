@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEV 호출 테스트 대시보드 — 2026-09 최신·처리속도 반영</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0d1117; color: #c9d1d9; padding: 20px; max-width: 780px; margin: 0 auto;
+  }
+  .header {
+    background: linear-gradient(135deg, #238636, #2ea043);
+    color: white; padding: 20px 24px; border-radius: 10px; margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .header h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .header .sub { opacity: 0.9; font-size: 0.85rem; }
+  .header .badge {
+    display: inline-block; background: rgba(255,255,255,0.15); padding: 2px 8px;
+    border-radius: 4px; font-size: 0.72rem; margin-top: 6px; font-weight: 600;
+  }
+  
+  .info-panel {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 14px;
+  }
+  .info-panel .ip-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 0.82rem; }
+  .info-panel .ip-item { display: flex; align-items: center; gap: 5px; }
+  .info-panel .ip-label { color: #8b949e; }
+  .info-panel .ip-val { color: #c9d1d9; font-weight: 600; font-family: ui-monospace, monospace; }
+  .info-panel .ip-div { color: #30363d; }
+  .info-panel .ip-highlight { color: #3fb950; }
+  
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px;
+  }
+  .card.full { grid-column: 1 / -1; }
+  .card h3 { font-size: 0.92rem; color: #58a6ff; margin-bottom: 8px; }
+  .card .hint { font-size: 0.73rem; color: #484f58; margin-top: 5px; line-height: 1.4; }
+  
+  .type-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .type-tab {
+    background: #21262d; border: 1px solid #30363d; color: #8b949e;
+    padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;
+    transition: all 0.15s; font-weight: 500;
+  }
+  .type-tab:hover { border-color: #58a6ff; color: #c9d1d9; }
+  .type-tab.active { background: #1f6feb; border-color: #1f6feb; color: white; }
+  
+  .input-group { margin-bottom: 8px; }
+  .input-group label { display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 2px; }
+  .input-group input, .input-group textarea {
+    width: 100%; background: #0d1117; border: 1px solid #30363d; color: #c9d1d9;
+    padding: 6px 10px; border-radius: 5px; font-size: 0.8rem; font-family: ui-monospace, monospace;
+    resize: vertical;
+  }
+  .input-group input:focus, .input-group textarea:focus { outline: none; border-color: #58a6ff; }
+  
+  .btn-row { display: flex; gap: 8px; margin: 10px 0; }
+  .btn {
+    flex: 1; padding: 8px 14px; border: none; border-radius: 6px;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-primary { background: #238636; color: white; }
+  .btn-primary:hover { background: #2ea043; }
+  .btn-primary:disabled { background: #21262d; color: #484f58; cursor: not-allowed; }
+  .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+  .btn-secondary:hover { background: #30363d; }
+  
+  .result-box {
+    background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+    padding: 12px 16px; min-height: 50px; font-family: ui-monospace, 'Courier New', monospace;
+    font-size: 0.76rem; white-space: pre-wrap; word-break: break-word; line-height: 1.5;
+  }
+  .result-box.success { border-color: #238636; }
+  .result-box.error { border-color: #da3633; }
+  .result-box .ts { color: #484f58; font-size: 0.68rem; display: block; margin-bottom: 3px; }
+  .rb-ok { color: #3fb950; font-weight: 600; }
+  .rb-err { color: #f85149; font-weight: 600; }
+  .rb-key { color: #58a6ff; }
+  .rb-val { color: #c9d1d9; }
+  .rb-warn { color: #d29922; }
+  
+  .speed-badge {
+    display: inline-block; background: #0d1117; border: 1px solid #30363d; border-radius: 4px;
+    padding: 2px 6px; font-size: 0.7rem; font-family: ui-monospace, monospace; margin-left: 4px;
+  }
+  .speed-badge.fast { color: #3fb950; border-color: #238636; }
+  .speed-badge.mid { color: #d29922; border-color: #d29922; }
+  
+  .prob-row { margin: 3px 0; }
+  .prob-label { font-size: 0.72rem; color: #8b949e; display: flex; justify-content: space-between; margin-bottom: 1px; }
+  .prob-track { height: 5px; background: #21262d; border-radius: 3px; overflow: hidden; }
+  .prob-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+  .prob-fill.high { background: linear-gradient(90deg, #238636, #2ea043); }
+  .prob-fill.mid { background: linear-gradient(90deg, #d29922, #e3b341); }
+  .prob-fill.low { background: linear-gradient(90deg, #da3633, #f85149); }
+  
+  .choice-chip {
+    display: inline-block; background: #0d1117; border: 1px solid #30363d; border-radius: 3px;
+    padding: 2px 6px; font-size: 0.7rem; margin: 1px 3px 1px 0;
+  }
+  .choice-chip.sel { border-color: #238636; background: rgba(35,134,54,0.12); }
+  .choice-chip .c-name { color: #8b949e; }
+  .choice-chip .c-pct { color: #58a6ff; font-weight: 600; }
+  
+  .score-box { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
+  .score-ring {
+    width: 40px; height: 40px; border-radius: 50%; background: #21262d;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700;
+    border: 2px solid #30363d; flex-shrink: 0;
+  }
+  .score-ring.high { border-color: #238636; }
+  .score-ring.mid { border-color: #d29922; }
+  .score-ring.low { border-color: #da3633; }
+  .score-ring .sv { color: #c9d1d9; }
+  .score-info { flex: 1; }
+  .score-info .si-label { font-size: 0.7rem; color: #8b949e; }
+  .score-info .si-val { font-size: 0.8rem; color: #c9d1d9; font-weight: 600; }
+  
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 6px; }
+  .quick-btn {
+    background: #21262d; border: 1px solid #30363d; color: #8b949e;
+    padding: 4px 7px; border-radius: 4px; font-size: 0.68rem; cursor: pointer;
+    text-align: left; transition: all 0.15s;
+  }
+  .quick-btn:hover { background: #30363d; color: #c9d1d9; border-color: #58a6ff; }
+  
+  .hist-section { margin-top: 10px; }
+  .hist-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .hist-head span { font-size: 0.78rem; color: #8b949e; }
+  .hist-list { max-height: 150px; overflow-y: auto; }
+  .hist-item {
+    background: #0d1117; border-left: 3px solid #30363d; padding: 4px 8px;
+    margin-bottom: 3px; font-size: 0.7rem; font-family: ui-monospace, monospace;
+    border-radius: 0 3px 3px 0; display: flex; justify-content: space-between; align-items: center; gap: 6px;
+  }
+  .hist-item.ok { border-left-color: #238636; }
+  .hist-item.err { border-left-color: #da3633; }
+  .hist-item .h-time { color: #484f58; font-size: 0.62rem; white-space: nowrap; }
+  .hist-item .h-q { color: #8b949e; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hist-item .h-r { font-size: 0.65rem; white-space: nowrap; }
+  .hist-item .h-r.ok { color: #3fb950; }
+  .hist-item .h-r.err { color: #f85149; }
+  
+  .stats-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .stat-box { background: #0d1117; border: 1px solid #30363d; border-radius: 4px; padding: 4px 8px; font-size: 0.72rem; }
+  .stat-box .st-label { color: #8b949e; }
+  .stat-box .st-val { color: #c9d1d9; font-weight: 600; font-family: ui-monospace, monospace; }
+  .stat-box .st-val.green { color: #3fb950; }
+  .stat-box .st-val.red { color: #f85149; }
+  
+  .hidden { display: none !important; }
+  
+  .footer { text-align: center; color: #484f58; font-size: 0.68rem; margin-top: 14px; padding-top: 10px; border-top: 1px solid #21262d; }
+  
+  code { color: #58a6ff; font-family: ui-monospace, monospace; font-size: 0.75em; background: #21262d; padding: 1px 3px; border-radius: 2px; }
+  
+  .speed-note { background: #0d1117; border: 1px solid #30363d; border-radius: 5px; padding: 8px 12px; margin-top: 8px; font-size: 0.75rem; color: #8b949e; line-height: 1.5; }
+  .speed-note strong { color: #c9d1d9; }
+  .speed-note .sp { color: #3fb950; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧪 JEV 호출 테스트 대시보드</h1>
+  <div class="sub">TypeSafe System One · Vercel AI Gateway · typesafe-ai/jev — 상태+질문 병렬 평가 · 처리 속도 정보 포함</div>
+  <div class="badge">2026-09 최신 · boolean/choice/score · state 병렬 패스 · RLCD 교정 확률 · 출력 토큰 무료</div>
+</div>
+
+<!-- 핵심 정보 패널 -->
+<div class="info-panel">
+  <div class="ip-row">
+    <div class="ip-item"><span class="ip-label">모델:</span><span class="ip-val">typesafe-ai/jev</span></div>
+    <div class="ip-div">|</div>
+    <div class="ip-item"><span class="ip-label">엔드포인트:</span><span class="ip-val">ai-gateway.vercel.sh/v1/evaluate</span></div>
+    <div class="ip-div">|</div>
+    <div class="ip-item"><span class="ip-label">타입 3종:</span><span class="ip-val">boolean · choice · score</span></div>
+    <div class="ip-div">|</div>
+    <div class="ip-item"><span class="ip-label">기대 지연:</span><span class="ip-val sp">70–500ms</span> <span class="speed-badge fast">독립 벤치마크 median 105ms</span></div>
+    <div class="ip-div">|</div>
+    <div class="ip-item"><span class="ip-label">비용:</span><span class="ip-val">$0.042/1M 입력 토큰</span> <span class="speed-badge">출력 무료</span></div>
+    <div class="ip-div">|</div>
+    <div class="ip-item"><span class="ip-label">처리 방식:</span><span class="ip-val">state + questions 병렬 1회 패스</span></div>
+  </div>
+</div>
+
+<!-- 상태 칩 -->
+<div class="stats-row">
+  <div class="stat-box"><span class="st-label">연결:</span> <span class="st-val" id="conn-status">확인 중...</span></div>
+  <div class="stat-box"><span class="st-label">API 키:</span> <span class="st-val" id="key-status">로드 중...</span></div>
+  <div class="stat-box"><span class="st-label">총 호출:</span> <span class="st-val" id="call-count">0</span></div>
+  <div class="stat-box"><span class="st-label">✅ 성공:</span> <span class="st-val green" id="success-count">0</span></div>
+  <div class="stat-box"><span class="st-label">❌ 실패:</span> <span class="st-val red" id="fail-count">0</span></div>
+  <div class="stat-box"><span class="st-label">평균 지연:</span> <span class="st-val" id="avg-latency">—</span></div>
+</div>
+
+<div class="two-col">
+
+  <!-- 왼쪽: 입력 -->
+  <div class="card full">
+    <h3>✏️ 상태(state) + 질문(questions) 입력</h3>
+    <p class="hint">
+      <strong>JEV 처리 속도 핵심:</strong> state(판단 대상) + questions(질문들)를 <strong>한 요청으로 함께</strong> 보내면, JEV가 <strong>단일 병렬 패스</strong>로 모든 질문을 동시에 평가합니다.
+      질문을 여러 개 추가해도 <strong>지연 시간은 거의 증가하지 않습니다</strong> (질문 수에 비례하는 건 비용뿐).
+      type 3종: <code>boolean</code> (true 확률), <code>choice</code> (선택), <code>score</code> (점수).
+    </p>
+    
+    <div class="input-group">
+      <label>state — 판단 대상 (상황 설명, 데이터, 문맥 등)</label>
+      <textarea id="state-input" rows="3" placeholder="판단 대상이 되는 정보. 예: 학생 수업 참여도, 고객 문의 내용, 시스템 상태 등">이 학생은 최근 3주 동안 수업에 꾸준히 참여했으며, 과제 제출률은 90%입니다. 지난 주 테스트 점수는 75점이었습니다.</textarea>
+    </div>
+    
+    <div class="type-tabs">
+      <button class="type-tab active" data-type="boolean">✅ boolean (0~1 true 확률)</button>
+      <button class="type-tab" data-type="choice">🔘 choice (선택지 1개)</button>
+      <button class="type-tab" data-type="score">📊 score (0~최대 점수)</button>
+    </div>
+  </div>
+    
+  <!-- boolean -->
+  <div id="panel-boolean">
+    <div class="input-group">
+      <label>질문 — boolean (true일 확률을 0~1로 반환)</label>
+      <textarea id="boolean-q" rows="2" placeholder="판단 지시문: 이 상태에서 ~한가?">이 학생은 개별화된 학습 지원이 필요한가?</textarea>
+    </div>
+    <div class="input-group">
+      <label>추가 boolean 질문 (새 줄마다 하나) — 병렬 동시 평가됨</label>
+      <textarea id="boolean-extra" rows="2" placeholder="예:
+수업 참여도는 충분한가?
+과제를 기한 내 제출할 가능성이 높은가?">수업 참여도는 충분한가?
+과제를 기한 내 제출할 가능성이 높은가?</textarea>
+    </div>
+    <div class="hint">
+      💡 <strong>병렬 처리 속도 이점:</strong> 위 3개 질문을 한 요청으로 보내면 JEV가 3개를 동시에 평가.<br>
+      개별 요청으로 3번 보내는 것보다 <strong>훨씬 빠르고 비용도 절약</strong>됩니다.
+    </div>
+  </div>
+  
+  <!-- choice -->
+  <div id="panel-choice" class="hidden">
+    <div class="input-group">
+      <label>질문 — choice (선택지 중 하나, 확률 분포 반환)</label>
+      <textarea id="choice-q" rows="2" placeholder="분류·선택 지시문">이 학생의 현재 학습 수준을 가장 잘 나타내는 범주는?</textarea>
+    </div>
+    <div class="input-group">
+      <label>선택지 (한 줄에 하나, 최대 255개)</label>
+      <textarea id="choice-opts" rows="3" placeholder="지원 필요
+보통
+양호
+우수">지원 필요
+보통
+양호
+우수</textarea>
+    </div>
+  </div>
+  
+  <!-- score -->
+  <div id="panel-score" class="hidden">
+    <div class="input-group">
+      <label>질문 — score (0~최대값 점수)</label>
+      <textarea id="score-q" rows="2" placeholder="점수 평가 지시문">이 학생의 현재 학업 성취도를 0~100 점으로 평가한다면?</textarea>
+    </div>
+    <div class="input-group">
+      <label>최대 점수 <span id="score-max-label" style="color:#8b949e;">100</span></label>
+      <input type="number" id="score-max" value="100" min="1" max="1000" oninput="document.getElementById('score-max-label').textContent = this.value">
+    </div>
+    <div class="input-group">
+      <label>추가 score 질문 (형식: "지시문|최대값", 새 줄마다)</label>
+      <textarea id="score-extra" rows="2" placeholder="참여도 평가|100
+과제 완성도|50">참여도 평가|100</textarea>
+    </div>
+  </div>
+  
+  <!-- 빠른 예시 -->
+  <label style="font-size:0.72rem; color:#8b949e; margin:8px 0 3px; display:block;">⚡ 빠른 예시 (클릭하면 state+질문 자동 입력, 병렬 평가용으로 구성됨)</label>
+  <div class="quick-grid">
+    <button class="quick-btn" data-ex="student">🎓 학생 지원 필요 (3질문 병렬)</button>
+    <button class="quick-btn" data-ex="task">⚡ 과제 긴급도 (2질문 병렬)</button>
+    <button class="quick-btn" data-ex="mail">📧 메일 분류 (3질문 병렬)</button>
+    <button class="quick-btn" data-ex="doom">🎮 Doom 상태 (3질문 병렬, 속도 데모)</button>
+  </div>
+</div>
+
+  <!-- 오른쪽: 실행 + 결과 -->
+  <div class="card full">
+    <h3>🚀 실행 & 결과 (처리 속도 정보 포함)</h3>
+    
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-call" onclick="callJEV()">🚀 JEV 호출 (병렬 평가, state+questions)</button>
+      <button class="btn btn-secondary" onclick="clearResult()">🗑️ 결과 지우기</button>
+    </div>
+    
+    <div class="result-box" id="result-box" style="margin-top:8px;">
+      <span style="color:#484f58; text-align:center; display:block; padding:14px;">아직 호출하지 않았습니다. state와 질문을 입력 후 "JEV 호출" 클릭.</span>
+    </div
+    
+    <!-- 처리 속도 노트 (호출 성공 시 채워짐) -->
+    <div id="speed-note" class="speed-note hidden"></div>
+  </div>
+
+  <!-- 호출 이력 -->
+  <div class="card full hist-section" id="hist-section" style="display:none;">
+    <div class="hist-head">
+      <span>📋 호출 이력 (최대 20, 처리 시간 포함)</span>
+      <button class="btn btn-secondary" style="padding:2px 6px; font-size:0.65rem;" onclick="clearHistory()">지우기</button>
+    </div>
+    <div class="hist-list" id="hist-list"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  JEV TypeSafe / Vercel AI Gateway · typesafe-ai/jev · boolean/choice/score · state 병렬 패스 · RLCD 교정 확률 · 처리 속도: 70–500ms · 2026-09-27
+</div>
+
+<script>
+let currentType = 'boolean';
+let apiKey = null;
+let callHistory = [];
+let successCount = 0, failCount = 0, totalLatency = 0;
+
+// API 키 로드
+async function loadAPIKey() {
+  try {
+    const res = await fetch('.env');
+    if (res.ok) {
+      const text = await res.text();
+      const m = text.match(/JEV_API_KEY=(.+)/);
+      if (m) { apiKey = m[1].trim(); return apiKey; }
+    }
+  } catch(e) {}
+  const stored = localStorage.getItem('jev_api_key_v3');
+  if (stored) { apiKey = stored; return apiKey; }
+  return null;
+}
+
+// 타입 탭
+document.querySelectorAll('.type-tab').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentType = this.dataset.type;
+    document.getElementById('panel-boolean').classList.toggle('hidden', currentType !== 'boolean');
+    document.getElementById('panel-choice').classList.toggle('hidden', currentType !== 'choice');
+    document.getElementById('panel-score').classList.toggle('hidden', currentType !== 'score');
+  });
+});
+
+// 빠른 예시
+const EXAMPLES = {
+  student: {
+    state: "이 학생은 최근 3주 동안 수업에 꾸준히 참여했으며, 과제 제출률은 90%입니다. 지난 주 테스트 점수는 75점이었습니다.",
+    q: "이 학생은 개별화된 학습 지원이 필요한가?",
+    extra: "수업 참여도는 충분한가?\n과제를 기한 내 제출할 가능성이 높은가?"
+  },
+  task: {
+    state: "고객이 3일째 결제 실패를 겪고 있으며, 판매가 중단되고 있습니다. 고객 지원이 2번 시도되었으나 해결되지 않았습니다.",
+    q: "이 문제는 즉시 조치가 필요한 긴급 상황인가?",
+    extra: "고객에게 환불이 필요한 상황인가?"
+  },
+  mail: {
+    state: "FROM: team@company.com, SUBJECT: 서버 다운 - 즉시 확인 필요, BODY: 배포가 두 번 실패했고 고객이 500 에러를 보고 있습니다. 지금 누군가 확인해줄 수 있나요?",
+    q: "이 메일은 긴급 처리가 필요한가?",
+    extra: "환불 요청이 포함되어 있는가?\n이 문제는 기술 팀 할 일인가?"
+  },
+  doom: {
+    state: "플레이어 위치: (120, 340), 방향: 북쪽, 가까운 적: 1마리 (거리 50px), 체력: 75/100, 탄약: 12, 벽: 앞쪽 30px",
+    q: "플레이어는 즉시 적과 교전해야 하는가?",
+    extra: "플레이어는 방향을 바꿔야 하는가?\n플레이어는 체력을 보존해야 하는가?"
+  }
+};
+
+document.querySelectorAll('[data-ex]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const ex = EXAMPLES[this.dataset.ex];
+    if (!ex) return;
+    document.getElementById('state-input').value = ex.state;
+    document.getElementById('boolean-q').value = ex.q;
+    document.getElementById('boolean-extra').value = ex.extra || '';
+    document.querySelector('.two-col').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// JEV 호출
+async function callJEV() {
+  const btn = document.getElementById('btn-call');
+  const resultBox = document.getElementById('result-box');
+  const speedNote = document.getElementById('speed-note');
+  const histSection = document.getElementById('hist-section');
+  
+  if (!apiKey) { apiKey = await loadAPIKey(); }
+  if (!apiKey) {
+    resultBox.innerHTML = '<span class="rb-err">❌ API 키가 없습니다.</span>\n<span style="color:#484f58;">.env에 JEV_API_KEY=키 저장 또는 콘솔(F12)에서 localStorage.setItem("jev_api_key_v3", "키")</span>';
+    return;
+  }
+  
+  const state = document.getElementById('state-input').value.trim();
+  if (!state) {
+    resultBox.innerHTML = '<span class="rb-err">❌ state(판단 대상)를 입력해주세요.</span>';
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = '⏳ 호출 중 (병렬 평가)...';
+  
+  // 질문 구성
+  const questions = {};
+  const t0 = performance.now();
+  
+  if (currentType === 'boolean') {
+    const mainQ = document.getElementById('boolean-q').value.trim();
+    if (!mainQ) { resultBox.innerHTML = '<span class="rb-err">❌ boolean 질문을 입력해주세요.</span>'; btn.disabled=false; btn.textContent='🚀 JEV 호출 (병렬 평가, state+questions)'; return; }
+    questions['q_main'] = { type: 'boolean', instructions: mainQ };
+    const extra = document.getElementById('boolean-extra').value;
+    if (extra) {
+      extra.split('\n').forEach((line, i) => {
+        const q = line.trim(); if (q) questions['q_extra_' + i] = { type: 'boolean', instructions: q };
+      });
+    }
+  } else if (currentType === 'choice') {
+    const qText = document.getElementById('choice-q').value.trim();
+    if (!qText) { resultBox.innerHTML = '<span class="rb-err">❌ choice 질문을 입력해주세요.</span>'; btn.disabled=false; btn.textContent='🚀 JEV 호출 (병렬 평가, state+questions)'; return; }
+    const opts = document.getElementById('choice-opts').value.split('\n').map(s=>s.trim()).filter(s=>s);
+    if (opts.length < 2) { resultBox.innerHTML = '<span class="rb-err">❌ 선택지 2개 이상 필요.</span>'; btn.disabled=false; btn.textContent='🚀 JEV 호출 (병렬 평가, state+questions)'; return; }
+    const optMap = {}; opts.forEach(o => { optMap[o] = o; });
+    questions['q_choice'] = { type: 'choice', instructions: qText, options: optMap };
+  } else if (currentType === 'score') {
+    const qText = document.getElementById('score-q').value.trim();
+    if (!qText) { resultBox.innerHTML = '<span class="rb-err">❌ score 질문을 입력해주세요.</span>'; btn.disabled=false; btn.textContent='🚀 JEV 호출 (병렬 평가, state+questions)'; return; }
+    const maxV = parseInt(document.getElementById('score-max').value) || 100;
+    questions['q_score'] = { type: 'score', instructions: qText, min: 0, max: maxV };
+    const extra = document.getElementById('score-extra').value;
+    if (extra) {
+      extra.split('\n').forEach((line, i) => {
+        const parts = line.split('|'); if (parts.length >= 2) {
+          const instr = parts[0].trim(); const mv = parseInt(parts[1].trim()) || 100;
+          if (instr) questions['q_score_' + i] = { type: 'score', instructions: instr, min: 0, max: mv };
+        }
+      });
+    }
+  }
+  
+  const body = { model: 'typesafe-ai/jev', state: state, questions: questions };
+  
+  try {
+    const response = await fetch('https://ai-gateway.vercel.sh/v1/evaluate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey,
+        'Provider': 'typesafe-ai'
+      },
+      body: JSON.stringify(body)
+    });
+    
+    const elapsed = Math.round(performance.now() - t0);
+    totalLatency += elapsed;
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      successCount++;
+      updateStats();
+      
+      const answers = data.answers || {};
+      const qCount = Object.keys(questions).length;
+      const cost = data.providerMetadata?.gateway?.cost || '0';
+      
+      // 결과 텍스트
+      let txt = '';
+      txt += '<span class="ts">⏱ 처리 시간: ' + elapsed + 'ms · ' + new Date().toLocaleTimeString() + '</span>\n';
+      txt += '<span class="rb-ok">✅ 200 OK — JEV 호출 성공 (state + ' + qCount + '개 질문 병렬 평가)</span>\n';
+      txt += '<span class="rb-key">state:</span> ' + state.substring(0, 80) + (state.length > 80 ? '...' : '') + '\n';
+      txt += '<span class="rb-key">질문 ' + qCount + '개 → 병렬 1회 패스</span>\n';
+      txt += '<span class="rb-key">입력 토큰:</span> ' + (data.usage?.inputTokens || '?') + ' · ';
+      txt += '<span class="rb-key">비용:</span> $' + parseFloat(cost).toFixed(6) + ' <span style="color:#3fb950;">(출력 무료)</span>\n\n';
+      
+      for (const [qId, ans] of Object.entries(answers)) {
+        txt += '<span class="rb-key">━━ ' + qId + ' ━━</span>\n';
+        if (ans.type === 'boolean') {
+          const prob = ans.probability;
+          const isTrue = prob >= 0.5;
+          txt += '  ' + (isTrue ? '✅ 참(true)' : '❌ 거짓(false)') + ' — true 확률 <strong>' + (prob*100).toFixed(1) + '%</strong>\n';
+          const bw = Math.round(prob*100);
+          const bc = prob >= 0.7 ? 'high' : (prob >= 0.4 ? 'mid' : 'low');
+          txt += '  <div class="prob-row"><div class="prob-label"><span>' + (isTrue?'참(true) 확률':'거짓(false) 확률') + '</span><span>' + (prob*100).toFixed(1) + '%</span></div>';
+          txt += '<div class="prob-track"><div class="prob-fill ' + bc + '" style="width:' + bw + '%"></div></div></div>\n';
+        } else if (ans.choice) {
+          txt += '  선택: <strong>' + ans.choice + '</strong>\n';
+          if (ans.probabilities) {
+            txt += '  <div style="margin:2px 0;">';
+            for (const [k,v] of Object.entries(ans.probabilities)) {
+              const sel = k === ans.choice ? ' sel' : '';
+              txt += '<span class="choice-chip' + sel + '"><span class="c-name">' + k + '</span> <span class="c-pct">' + (v*100).toFixed(1) + '%</span></span>';
+            }
+            txt += '</div>\n';
+          }
+        } else if (ans.score !== undefined) {
+          const sc = ans.score; const mx = ans.max || 100;
+          const pct = mx > 0 ? Math.round(sc/mx*100) : 0;
+          const bc = pct >= 70 ? 'high' : (pct >= 40 ? 'mid' : 'low');
+          txt += '  <div class="score-box"><div class="score-ring ' + bc + '"><span class="sv">' + sc + '</span></div>';
+          txt += '<div class="score-info"><div class="si-label">점수 (최대 ' + mx + ')</div><div class="si-val">' + sc + ' / ' + mx + ' (' + pct + '%)</div></div></div>\n';
+        }
+        txt += '\n';
+      }
+      
+      resultBox.innerHTML = txt;
+      resultBox.className = 'result-box success';
+      
+      // 처리 속도 노트
+      let sp = '';
+      sp += '<strong>⚡ 처리 속도 분석:</strong>\n';
+      sp += '• 실제 처리 시간: <strong>' + elapsed + 'ms</strong>\n';
+      sp += '• JEV 목표 지연: <span class="sp">70–500ms</span> (TypeSafe 발표)\n';
+      sp += '• 독립 벤치마크 median: <strong>~105ms</strong> (jev-decision-bench, 2026-09)\n';
+      sp += '• 질문 ' + qCount + '개 <strong>병렬 1회 패스</strong> — 질문 추가해도 지연 거의 증가 안 함\n';
+      sp += '• 비용: <strong>$' + parseFloat(cost).toFixed(6) + '</strong> (입력 ' + (data.usage?.inputTokens || '?') + '토큰, 출력 무료)\n';
+      sp += '• <span style="color:#3fb950;">' + (elapsed <= 500 ? '✅ 목표 범위 내' : (elapsed <= 2000 ? '⚠️ 약간 느림 (게이트웨이 라우팅 등 추가 시간 가능)' : '❌ 목표보다 느림')) + '</span>\n';
+      speedNote.innerHTML = sp;
+      speedNote.classList.remove('hidden');
+      
+      addHistory(state.substring(0,50), '✅ ' + qCount + '질문 · ' + elapsed + 'ms', true, elapsed);
+      
+    } else {
+      failCount++;
+      updateStats();
+      let etxt = '<span class="ts">⏱ ' + elapsed + 'ms</span>\n';
+      etxt += '<span class="rb-err">❌ HTTP ' + response.status + ' ' + (response.statusText||'') + '</span>\n\n';
+      try {
+        if (data.error) etxt += '<span class="rb-err">오류:</span> ' + (data.error.message || JSON.stringify(data.error)) + '\n';
+        else etxt += '<span style="color:#484f58;">' + JSON.stringify(data).substring(0,300) + '</span>\n';
+      } catch(e) { etxt += '<span style="color:#484f58;">' + await response.text() + '</span>'; }
+      resultBox.innerHTML = etxt;
+      resultBox.className = 'result-box error';
+      addHistory(state.substring(0,50), '❌ HTTP ' + response.status, false, elapsed);
+    }
+    
+  } catch(e) {
+    failCount++;
+    updateStats();
+    resultBox.innerHTML = '<span class="rb-err">❌ 네트워크 오류: ' + e.message + '</span>';
+    resultBox.className = 'result-box error';
+    addHistory(state.substring(0,50), '❌ 네트워크 오류', false, 0);
+  }
+  
+  btn.disabled = false;
+  btn.textContent = '🚀 JEV 호출 (병렬 평가, state+questions)';
+}
+
+function updateStats() {
+  document.getElementById('call-count').textContent = successCount + failCount;
+  document.getElementById('success-count').textContent = successCount;
+  document.getElementById('fail-count').textContent = failCount;
+  document.getElementById('avg-latency').textContent = successCount > 0 ? Math.round(totalLatency/successCount) + 'ms' : '—';
+}
+
+function addHistory(q, r, ok, lat) {
+  const t = new Date().toLocaleTimeString();
+  callHistory.unshift({ time:t, q:q.substring(0,45), r, ok, lat });
+  if (callHistory.length > 20) callHistory.pop();
+  const list = document.getElementById('hist-list');
+  const sec = document.getElementById('hist-section');
+  sec.style.display = 'block';
+  list.innerHTML = callHistory.map(h =>
+    '<div class="hist-item ' + (h.ok?'ok':'err') + '">' +
+    '<span class="h-time">' + h.time + '</span>' +
+    '<span class="h-q">' + h.q + '</span>' +
+    '<span class="h-r ' + (h.ok?'ok':'err') + '">' + h.r + (h.lat? ' ('+h.lat+'ms)':'') + '</span>' +
+    '</div>'
+  ).join('');
+}
+
+function clearResult() {
+  document.getElementById('result-box').innerHTML = '<span style="color:#484f58; text-align:center; display:block; padding:14px;">결과가 지워졌습니다.</span>';
+  document.getElementById('speed-note').classList.add('hidden');
+}
+
+function clearHistory() {
+  callHistory = [];
+  document.getElementById('hist-list').innerHTML = '';
+  document.getElementById('hist-section').style.display = 'none';
+  successCount = 0; failCount = 0; totalLatency = 0;
+  updateStats();
+}
+
+// 초기화
+(async function() {
+  apiKey = await loadAPIKey();
+  const cs = document.getElementById('conn-status');
+  const ks = document.getElementById('key-status');
+  if (apiKey) {
+    ks.textContent = apiKey.substring(0,8) + '***';
+    cs.textContent = '✅ 키 로드됨';
+    cs.style.color = '#3fb950';
+  } else {
+    ks.textContent = '설정 필요';
+    cs.textContent = '⚠️ 키 없음';
+    cs.style.color = '#d29922';
+  }
+})();
+</script>
+
+</body>
+</html>
