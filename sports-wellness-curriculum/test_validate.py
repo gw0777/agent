@@ -13,6 +13,13 @@ def statuses(results, item_prefix):
     return [s for s, item, _ in results if item.startswith(item_prefix)]
 
 
+def strict(data):
+    """승인 예외를 제거한 데이터 — 기준 위반이 FAIL로 잡히는지 확인용."""
+    d = copy.deepcopy(data)
+    d["rules"].pop("accepted_exceptions", None)
+    return d
+
+
 def fill_all(data, mode="원격", practice=0):
     """모든 빈 슬롯을 채운 가상 데이터 (트랙 선언 학점에 맞춤)."""
     d = copy.deepcopy(data)
@@ -40,10 +47,27 @@ class TestCurrentData(unittest.TestCase):
         for item in ("총 전공학점", "코어트랙 수", "코어트랙 합계", "실무트랙 유형 수", "실무트랙 합계"):
             self.assertEqual(statuses(results, item), [v.PASS], item)
 
-    def test_pending_items_reported(self):
+    def test_manuscript_ratios(self):
+        # 원고 표 '전공 실험·실습 교과목 편성 비율'(과목 51.6%, 학점 47.0%)과 일치해야 한다.
+        detail = [d for _, item, d in v.check_ratios(BASE) if item.startswith("실험·실습")][0]
+        self.assertIn("과목 51.6%", detail)
+        self.assertIn("학점 47.0%", detail)
+
+    def test_accepted_exceptions_reported(self):
         results = v.validate(BASE)
-        self.assertEqual(statuses(results, "실험·실습 편성 비율"), [v.PENDING])
-        self.assertEqual(statuses(results, "원격 비율"), [v.PENDING])
+        self.assertEqual(statuses(results, "실험·실습 편성 비율"), [v.EXCEPTION])
+        self.assertEqual(statuses(results, "실무트랙 유형 수"), [v.PASS])
+        self.assertIn(v.EXCEPTION, statuses(results, "실무트랙 유형"))
+
+    def test_blended_counts_as_remote(self):
+        self.assertEqual(statuses(v.check_ratios(BASE), "원격 비율"), [v.PASS])
+
+    def test_null_values_reported_pending(self):
+        d = copy.deepcopy(BASE)
+        d["tracks"][1]["courses"][0]["credits"] = None
+        d["tracks"][1]["courses"][0]["mode"] = None
+        self.assertIn(v.PENDING, statuses(v.check_tracks(d), "스포츠경영"))
+        self.assertEqual(statuses(v.check_ratios(d), "원격 비율"), [v.PENDING])
 
 
 class TestRules(unittest.TestCase):
@@ -57,10 +81,8 @@ class TestRules(unittest.TestCase):
         d["tracks"][2]["declared_credits"] = 22
         self.assertIn(v.FAIL, statuses(v.check_totals(d), "코어 건강증진"))
 
-    def test_region_track_rejected(self):
-        d = copy.deepcopy(BASE)
-        d["tracks"][4]["field_type"] = "③-L"
-        self.assertIn(v.FAIL, statuses(v.check_totals(d), "실무트랙 유형"))
+    def test_region_track_without_approval_fails(self):
+        self.assertIn(v.FAIL, statuses(v.check_totals(strict(BASE)), "실무트랙 유형"))
 
     def test_track_credit_mismatch_fails(self):
         d = fill_all(BASE)
@@ -86,8 +108,8 @@ class TestRules(unittest.TestCase):
             c["mode"] = "실기"
         self.assertEqual(statuses(v.check_ratios(d), "원격 비율"), [v.PASS])
 
-    def test_practice_everywhere_fails_ratio(self):
-        d = fill_all(BASE, practice=1)
+    def test_practice_over_limit_without_approval_fails(self):
+        d = fill_all(strict(BASE), practice=1)
         self.assertEqual(statuses(v.check_ratios(d), "실험·실습"), [v.FAIL])
 
     def test_forbidden_term_detected(self):

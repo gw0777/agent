@@ -6,7 +6,8 @@ null로 남은 항목은 '대기'로 보고하고, 확정된 값끼리 어긋나
 사용법:
     python3 validate.py                 # 기본 데이터와 초안 검증
     python3 validate.py path/to.json    # 다른 데이터 파일 검증
-종료 코드: 위반이 있으면 1, 없으면 0 (대기는 실패로 보지 않음)
+종료 코드: 위반이 있으면 1, 없으면 0 (대기·예외(승인)는 실패로 보지 않음)
+rules.accepted_exceptions에 사용자가 승인한 기준 초과 항목을 적으면 '위반' 대신 '예외(승인)'로 보고한다.
 """
 
 import json
@@ -16,7 +17,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 DEFAULT_DATA = HERE / "data" / "curriculum.json"
 
-PASS, FAIL, PENDING = "통과", "위반", "대기"
+PASS, FAIL, PENDING, EXCEPTION = "통과", "위반", "대기", "예외(승인)"
 
 # 사용자 용어 규칙: '적응 체육'은 쓰지 않고 '특수체육'으로 통일한다.
 FORBIDDEN_TERMS = {"적응 체육": "특수체육", "적응체육": "특수체육"}
@@ -78,7 +79,9 @@ def check_totals(data):
     fields = [t for t in tracks if t["group"] == "실무"]
     types = sorted({t["field_type"] for t in fields})
     if "③-L" in types:
-        results.append((FAIL, "실무트랙 유형", "③-L 지역연계 혁신과정은 혁신교과목 운영 실적이 없어 편성 불가로 결정됨"))
+        note = r.get("accepted_exceptions", {}).get("region_track")
+        results.append((EXCEPTION, "실무트랙 유형", f"③-L 편성 — {note}") if note else
+                       (FAIL, "실무트랙 유형", "③-L 지역연계 혁신과정은 혁신교과목 운영 실적이 필요함"))
     results.append((PASS if len(types) >= r["field_track_type_min"] else FAIL, "실무트랙 유형 수",
                     f"{len(types)}개 {types} (기준 {r['field_track_type_min']} 이상)"))
     field_sum = sum(t["declared_credits"] for t in fields)
@@ -94,7 +97,7 @@ def check_ratios(data):
 
     modes = [c["mode"] for c in courses]
     if _known(modes):
-        remote = sum(1 for m in modes if m == "원격")
+        remote = sum(1 for m in modes if m.startswith("원격"))
         ratio = remote / len(courses)
         results.append((PASS if ratio >= r["remote_ratio_min"] else FAIL, "원격 비율(과목 수)",
                         f"{remote}/{len(courses)} = {ratio:.1%} (기준 {r['remote_ratio_min']:.0%} 이상)"))
@@ -110,8 +113,13 @@ def check_ratios(data):
         by_count = len(prac) / len(courses)
         by_credit = sum(prac) / sum(cr for cr, _ in hours)
         worst = max(by_count, by_credit)
-        results.append((PASS if worst <= r["practice_ratio_max"] else FAIL, "실험·실습 편성 비율",
-                        f"과목 {by_count:.1%} / 학점 {by_credit:.1%} (기준 {r['practice_ratio_max']:.0%} 이하)"))
+        detail = f"과목 {by_count:.1%} / 학점 {by_credit:.1%} (기준 {r['practice_ratio_max']:.0%} 이하)"
+        note = r.get("accepted_exceptions", {}).get("practice_ratio")
+        if worst <= r["practice_ratio_max"]:
+            results.append((PASS, "실험·실습 편성 비율", detail))
+        else:
+            results.append((EXCEPTION, "실험·실습 편성 비율", f"{detail} — {note}") if note else
+                           (FAIL, "실험·실습 편성 비율", detail))
     else:
         results.append((PENDING, "실험·실습 편성 비율", "시수 자료 대기 (추가 교육과정 자료 업로드 후 확정)"))
     return results
@@ -140,8 +148,8 @@ def main(argv):
     results = validate(data, sorted(HERE.glob("*.md")))
     for status, item, detail in results:
         print(f"[{status}] {item}: {detail}")
-    counts = {s: sum(1 for r in results if r[0] == s) for s in (PASS, FAIL, PENDING)}
-    print(f"\n요약: 통과 {counts[PASS]} / 위반 {counts[FAIL]} / 대기 {counts[PENDING]}")
+    counts = {s: sum(1 for r in results if r[0] == s) for s in (PASS, FAIL, PENDING, EXCEPTION)}
+    print(f"\n요약: 통과 {counts[PASS]} / 위반 {counts[FAIL]} / 대기 {counts[PENDING]} / 예외(승인) {counts[EXCEPTION]}")
     return 1 if counts[FAIL] else 0
 
 
