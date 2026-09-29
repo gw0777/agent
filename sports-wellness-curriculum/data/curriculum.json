@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "source": "스포츠웰니스경영학전공_운영방안_및_세부사항(안) 2026.6. (Google Drive)",
+    "decisions": {
+      "계열": "인문사회계열",
+      "원격비율_기준": "과목 수 기준 (원격 80% 이상 / 실기 20% 이하)",
+      "지역연계혁신과정": "혁신교과목 운영 실적 없음 → ③-P 현장실습과정으로 전환",
+      "전공역량": "운영방안 표 3의 역량 3개를 그대로 사용",
+      "나노디그리": "포함"
+    },
+    "pending": "실험·실습 시수와 과목별 운영형태(원격/실기)는 사용자가 추가 교육과정 자료를 올린 뒤 확정한다. null 값은 모두 자료 대기 항목이다."
+  },
+  "rules": {
+    "total_credits_min": 78,
+    "total_credits_max": 84,
+    "practice_ratio_max": 0.20,
+    "core_track_count_min": 2,
+    "core_track_count_max": 3,
+    "core_total_min": 30,
+    "core_each_min": 15,
+    "core_each_max": 21,
+    "field_track_type_min": 2,
+    "field_total_min": 25,
+    "remote_ratio_min": 0.80
+  },
+  "tracks": [
+    {
+      "id": "EXP",
+      "group": "탐색",
+      "name": "전공탐색트랙",
+      "declared_courses": 3,
+      "declared_credits": 9,
+      "courses": [
+        {"name": "스포츠웰니스개론", "credits": 3, "theory": null, "practice": null, "mode": null},
+        {"name": "스포츠경영학개론", "credits": 3, "theory": null, "practice": null, "mode": null},
+        {"name": "건강운동과학기초", "credits": 3, "theory": null, "practice": null, "mode": null}
+      ]
+    },
+    {
+      "id": "C1",
+      "group": "코어",
+      "name": "스포츠경영 탐구과정",
+      "declared_courses": 5,
+      "declared_credits": 15,
+      "courses": [
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null}
+      ]
+    },
+    {
+      "id": "C2",
+      "group": "코어",
+      "name": "건강증진 탐구과정",
+      "declared_courses": 6,
+      "declared_credits": 17,
+      "courses": [
+        {"name": "AI기반시니어트레이닝과근기능관리", "credits": 3, "theory": 2, "practice": 1, "mode": null, "note": "나노디그리2 구성 과목. 소속 트랙은 운영방안에 명시되지 않아 【확인】"},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null}
+      ]
+    },
+    {
+      "id": "C3",
+      "group": "코어",
+      "name": "스마트헬스케어 탐구과정",
+      "declared_courses": 6,
+      "declared_credits": 16,
+      "courses": [
+        {"name": "EMG기반운동기능평가처방론", "credits": 2, "theory": 1, "practice": 1, "mode": null, "note": "나노디그리2 구성 과목. 소속 트랙 【확인】"},
+        {"name": "스포츠빅데이터분석실무", "credits": 2, "theory": 1, "practice": 1, "mode": null, "note": "나노디그리1 구성 과목. 소속 트랙 【확인】"},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null}
+      ]
+    },
+    {
+      "id": "P",
+      "group": "실무",
+      "field_type": "③-P",
+      "name": "현장실습과정",
+      "declared_courses": 3,
+      "declared_credits": 7,
+      "courses": [
+        {"name": "커뮤니티스포츠기획", "credits": null, "theory": null, "practice": null, "mode": null, "note": "③-L에서 이관"},
+        {"name": "스포츠이벤트기획실무", "credits": null, "theory": null, "practice": null, "mode": null, "note": "③-L에서 이관"},
+        {"name": "지역체육행정실습", "credits": null, "theory": null, "practice": null, "mode": null, "note": "③-L에서 이관"}
+      ]
+    },
+    {
+      "id": "U",
+      "group": "실무",
+      "field_type": "③-U",
+      "name": "통합실무과정",
+      "declared_courses": 6,
+      "declared_credits": 15,
+      "courses": [
+        {"name": "스포츠경영마케팅실무", "credits": 3, "theory": 2, "practice": 1, "mode": null},
+        {"name": "AI기반스포츠소비자분석및행사기획", "credits": 3, "theory": 2, "practice": 1, "mode": null},
+        {"name": "퍼스널트레이닝실습", "credits": 2, "theory": 1, "practice": 1, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null},
+        {"name": null, "credits": null, "theory": null, "practice": null, "mode": null}
+      ]
+    },
+    {
+      "id": "S",
+      "group": "실무",
+      "field_type": "③-S",
+      "name": "전문자격과정",
+      "declared_courses": 2,
+      "declared_credits": 4,
+      "courses": [
+        {"name": "스포츠경영관리사실무", "credits": 2, "theory": 1, "practice": 1, "mode": null},
+        {"name": "건강운동관리사실무", "credits": 2, "theory": null, "practice": null, "mode": null}
+      ]
+    }
+  ]
+}
