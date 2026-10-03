@@ -1,0 +1,383 @@
+{
+  "_meta": {
+    "source": "미래라이프대학 교육과정 개발 연구(원고).hwpx — 스포츠웰니스경영학 절 (kordoc 변환). 충돌 시 원고 우선.",
+    "decisions": {
+      "계열": "인문사회계열",
+      "원격비율_기준": "과목 수 기준. 원고 운영원칙상 탐색·코어는 비실시간 온라인, 실무트랙 실습과목은 블렌디드(주말 대면) — 블렌디드도 원격으로 분류",
+      "지역연계혁신과정": "원고 우선: ③-L 유지 (혁신교과목 실적 '해당사항없음' — 편성 요건 【확인】)",
+      "실험실습비율": "원고 수치 유지: 과목 51.6%, 학점 47.0% (인문사회 20% 기준 초과 — 사유 기재 필요)",
+      "전공역량": "원고의 하위 전공역량·구성요인·행동지표 사용",
+      "나노디그리": "포함 (원고 나노디그리 1·2)"
+    }
+  },
+  "rules": {
+    "total_credits_min": 78,
+    "total_credits_max": 84,
+    "practice_ratio_max": 0.2,
+    "core_track_count_min": 2,
+    "core_track_count_max": 3,
+    "core_total_min": 30,
+    "core_each_min": 15,
+    "core_each_max": 21,
+    "field_track_type_min": 2,
+    "field_total_min": 25,
+    "remote_ratio_min": 0.8,
+    "accepted_exceptions": {
+      "practice_ratio": "원고 수치 유지 결정 — 20% 초과 사유를 보고서에 기재",
+      "region_track": "원고 우선으로 ③-L 유지 — 혁신교과목 실적 요건 확인 필요"
+    }
+  },
+  "tracks": [
+    {
+      "id": "EXP",
+      "group": "탐색",
+      "name": "전공탐색트랙",
+      "declared_courses": 3,
+      "declared_credits": 9,
+      "courses": [
+        {
+          "name": "스포츠웰니스개론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "기초",
+          "semester": "1-1"
+        },
+        {
+          "name": "스포츠경영학개론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "기초",
+          "semester": "1-1"
+        },
+        {
+          "name": "건강운동과학기초",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "기초",
+          "semester": "1-2"
+        }
+      ]
+    },
+    {
+      "id": "C1",
+      "group": "코어",
+      "name": "스포츠경영 탐구과정",
+      "declared_courses": 5,
+      "declared_credits": 15,
+      "courses": [
+        {
+          "name": "스포츠경영론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "1-1"
+        },
+        {
+          "name": "스포츠마케팅론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "1-2"
+        },
+        {
+          "name": "스포츠산업론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "2-1"
+        },
+        {
+          "name": "스포츠시설경영론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "2-2"
+        },
+        {
+          "name": "스포츠법규와윤리",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "3-1"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "group": "코어",
+      "name": "건강증진 탐구과정",
+      "declared_courses": 6,
+      "declared_credits": 17,
+      "courses": [
+        {
+          "name": "운동생리학",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "1-1"
+        },
+        {
+          "name": "건강운동처방론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "1-2"
+        },
+        {
+          "name": "스포츠영양학",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "2-1"
+        },
+        {
+          "name": "시니어웰니스프로그램론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "2-2"
+        },
+        {
+          "name": "재활운동처방론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "3-1"
+        },
+        {
+          "name": "스포츠심리상담론",
+          "credits": 2,
+          "theory": 2,
+          "practice": 0,
+          "mode": "원격",
+          "level": "핵심",
+          "semester": "3-2"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "group": "코어",
+      "name": "스마트헬스케어 탐구과정",
+      "declared_courses": 6,
+      "declared_credits": 16,
+      "courses": [
+        {
+          "name": "AI기반트레이닝과운동평가개론",
+          "credits": 3,
+          "theory": 3,
+          "practice": 0,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "2-1"
+        },
+        {
+          "name": "기능해부학기반근육기능평가",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "2-2"
+        },
+        {
+          "name": "웨어러블데이터활용운동강도및피로평가법",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "3-1"
+        },
+        {
+          "name": "EMG기반운동기능평가처방론",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "3-2",
+          "en": "EMG-based Exercise Function Evaluation & Prescription"
+        },
+        {
+          "name": "AI기반골프트레이닝과움직임분석",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "4-1"
+        },
+        {
+          "name": "AI기반시니어트레이닝과근기능관리",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격",
+          "level": "심화",
+          "semester": "4-2",
+          "en": "AI-based Senior Training & Muscle Function Management"
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "group": "실무",
+      "field_type": "③-L",
+      "name": "지역연계 혁신과정",
+      "declared_courses": 3,
+      "declared_credits": 7,
+      "courses": [
+        {
+          "name": "커뮤니티스포츠기획",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "3-1"
+        },
+        {
+          "name": "스포츠이벤트기획실무",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "3-2"
+        },
+        {
+          "name": "지역체육행정실습",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "4-1"
+        }
+      ]
+    },
+    {
+      "id": "U",
+      "group": "실무",
+      "field_type": "③-U",
+      "name": "통합실무과정",
+      "declared_courses": 6,
+      "declared_credits": 15,
+      "courses": [
+        {
+          "name": "스포츠경영마케팅실무",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "2-1",
+          "en": "Sports Management Marketing Practice"
+        },
+        {
+          "name": "AI기반스포츠소비자분석및행사기획",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "2-2",
+          "en": "AI-based Sports Consumer Analysis & Event Planning"
+        },
+        {
+          "name": "퍼스널트레이닝실습",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "3-1",
+          "en": "Personal Training Practice"
+        },
+        {
+          "name": "스포츠창업인큐베이팅",
+          "credits": 3,
+          "theory": 2,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "3-1"
+        },
+        {
+          "name": "근육불균형보상패턴평가교정운동",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "3-2"
+        },
+        {
+          "name": "스포츠빅데이터분석실무",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "4-1",
+          "en": "Sports Big Data Analysis Practice"
+        }
+      ]
+    },
+    {
+      "id": "S",
+      "group": "실무",
+      "field_type": "③-S",
+      "name": "전문자격과정",
+      "declared_courses": 2,
+      "declared_credits": 4,
+      "courses": [
+        {
+          "name": "스포츠경영관리사실무",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "4-1"
+        },
+        {
+          "name": "건강운동관리사실무",
+          "credits": 2,
+          "theory": 1,
+          "practice": 1,
+          "mode": "원격(블렌디드)",
+          "level": "응용",
+          "semester": "4-2"
+        }
+      ]
+    }
+  ]
+}
