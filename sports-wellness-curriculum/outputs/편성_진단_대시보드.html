@@ -1,0 +1,274 @@
+<title>스포츠웰니스경영학 편성 진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: 보고서형 단일 칼럼 — 요약 지표 → 편성 구조 차트 → 판정표 → 진단·확인사항 */
+:root{
+  --bg:#f6f7f8; --surface:#ffffff; --line:#dfe3e8; --grid:#eceff2;
+  --fg:#131820; --fg2:#4a5260; --fg3:#7a8290;
+  --accent:#1d4f8f;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --good:#1f7a4a; --good-bg:#e3f3ea; --warn:#a05a00; --warn-bg:#fdf0d8; --crit:#b42318; --crit-bg:#fde7e4;
+  --f-display:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;padding:0 16px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 64px;display:grid;gap:28px}
+header{display:grid;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--fg3);text-transform:uppercase}
+h1{font-family:var(--f-display);font-size:clamp(24px,4vw,34px);line-height:1.25;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:20px;margin:0;text-wrap:balance}
+h3{font-size:15px;margin:0;font-weight:600}
+p{margin:0}
+.lede{color:var(--fg2);max-width:68ch}
+.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+section{display:grid;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px;min-width:0;align-content:start}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:6px;align-content:start}
+.kpi .v{font-family:var(--f-mono);font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k{font-size:13px;color:var(--fg2)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;width:fit-content}
+.pill.good{background:var(--good-bg);color:var(--good)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.crit{background:var(--crit-bg);color:var(--crit)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--fg2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:420px}
+.chart text{fill:var(--fg2);font-family:var(--f-body);font-size:12px}
+.chart .val{fill:var(--fg);font-family:var(--f-mono);font-size:12px}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .ax{stroke:var(--line);stroke-width:1}
+.chart .ref{stroke:var(--fg);stroke-width:1.5;stroke-dasharray:4 3}
+.chart .band{fill:var(--good-bg)}
+.chart rect.m{stroke:var(--surface);stroke-width:2}
+.chart rect.m:hover{opacity:.85}
+.note{font-size:13px;color:var(--fg2)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--fg3);font-weight:600;letter-spacing:.03em;white-space:nowrap}
+td.num,th.num{text-align:right}
+details summary{cursor:pointer;color:var(--accent);font-size:13px}
+details summary:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.find{display:grid;gap:10px}
+.find li{display:grid;grid-template-columns:3.6em 1fr;gap:10px;align-items:start}
+.find .pill{justify-content:center;width:auto}
+ul.plain{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+#tip{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;max-width:240px;line-height:1.45;z-index:10}
+footer{font-size:12px;color:var(--fg3)}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">미래라이프대학 · 2027학년도 전공교육과정 개발</span>
+    <h1>스포츠웰니스경영학 편성 진단</h1>
+    <p class="lede">연구 원고 수정본의 31개 교과목을 인문사회계열 편성 기준과 대조한 결과입니다. 학점 구조는 기준을 모두 충족하고, 실험·실습 비율과 지역연계 혁신과정 2건은 원고 우선 결정에 따른 예외로 남아 있습니다.</p>
+  </header>
+
+  <section aria-label="요약 지표">
+    <div class="kpis">
+      <div class="kpi"><span class="k">총 전공학점 (기준 78~84)</span><span class="v">83</span><span class="pill good">✓ 충족 · 31과목</span></div>
+      <div class="kpi"><span class="k">원격 운영 비율 (과목 수, 기준 80% 이상)</span><span class="v">100%</span><span class="pill good">✓ 31/31 · 블렌디드 11 포함</span></div>
+      <div class="kpi"><span class="k">실험·실습 편성 비율 (학점, 기준 20% 이하)</span><span class="v">47.0%</span><span class="pill warn">! 예외(승인) · 사유 기재</span></div>
+      <div class="kpi"><span class="k">자동 검증 19개 항목</span><span class="v">17 / 0 / 2</span><span class="pill good">통과 / 위반 / 예외</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>트랙별 편성 학점</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>과정별 학점과 기준 범위 <span class="note">(단위: 학점)</span></h3>
+        <div class="legend"><span><i style="background:var(--s1)"></i>전공탐색</span><span><i style="background:var(--s2)"></i>전공코어</span><span><i style="background:var(--s3)"></i>전공실무</span><span><i style="background:var(--good-bg);outline:1px solid var(--good)"></i>코어 트랙당 기준 15~21학점</span></div>
+        <div class="chart" id="c-track"></div>
+        <p class="note">코어 3개 과정은 모두 15~21학점 범위 안에 있습니다(합계 48학점, 기준 30 이상). 실무 3개 유형은 합계 26학점으로 기준 25학점을 넘습니다.</p>
+      </div>
+      <div class="panel">
+        <h3>이론·실습 시수 구성 <span class="note">(단위: 주당 시수)</span></h3>
+        <div class="legend"><span><i style="background:var(--s1)"></i>이론 시수</span><span><i style="background:var(--s2)"></i>실험·실습 시수</span></div>
+        <div class="chart" id="c-hours"></div>
+        <p class="note">실습 시수 16시간은 스마트헬스케어 탐구과정(5)과 실무트랙 11과목(11)에만 있습니다. 탐색·코어1·코어2는 이론 100%입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>기준 대비 비율</h2>
+    <div class="panel">
+      <div class="legend"><span><i style="background:var(--s1)"></i>현재 편성</span><span><i style="background:none;border-top:2px dashed var(--fg);height:0;width:14px;vertical-align:3px"></i>기준선</span></div>
+      <div class="chart" id="c-ratio"></div>
+      <p class="note">실험·실습 비율은 과목 51.6%(16/31), 학점 47.0%(39/83)로 인문사회계열 기준 20%의 두 배를 넘습니다. 원고 수치를 유지하기로 했으므로 보고서 Ⅲ장에 초과 사유를 적었고, 교무처 수용 여부는 아직 확인되지 않았습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>학기별 이수 학점 (단수전공 로드맵)</h2>
+    <div class="panel">
+      <div class="legend"><span><i style="background:var(--s1)"></i>전공탐색</span><span><i style="background:var(--s2)"></i>전공코어</span><span><i style="background:var(--s3)"></i>전공실무</span></div>
+      <div class="chart" id="c-sem"></div>
+      <p class="note">3학년 1학기에 17학점(6과목)이 몰리고 4학년 2학기는 5학점(2과목)입니다. 성인학습자의 학기당 부담을 고르게 하려면 3-1 과목 일부를 4-2로 옮기는 안을 검토할 만합니다.</p>
+      <details><summary>표로 보기</summary>
+        <div class="tablewrap"><table id="t-sem"></table></div>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <h2>자동 검증 결과</h2>
+    <div class="panel">
+      <div class="tablewrap"><table>
+        <thead><tr><th>판정</th><th>항목</th><th>결과</th></tr></thead>
+        <tbody id="t-val"></tbody>
+      </table></div>
+      <p class="note">validate.py 실행 결과입니다(테스트 15건 통과). 예외(승인)는 사용자가 원고 우선으로 결정한 항목이며 교무처 확인이 남아 있습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>도출 결과와 확인할 사항</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>도출 결과</h3>
+        <ul class="plain find">
+          <li><span class="pill good">충족</span><span>총 83학점, 코어 3개 과정 48학점, 실무 3개 유형 26학점으로 학점 구조 기준을 모두 충족합니다.</span></li>
+          <li><span class="pill good">충족</span><span>블렌디드 과목을 원격으로 분류하면 31개 과목 모두 원격 기반이라 80% 기준을 충족합니다.</span></li>
+          <li><span class="pill warn">예외</span><span>실험·실습 학점 47.0%는 20% 기준을 넘습니다. 수행 중심 직무역량(퍼스널트레이닝, 근육기능 평가, EMG·웨어러블 측정)을 근거로 사유를 적었습니다.</span></li>
+          <li><span class="pill warn">예외</span><span>③-L 지역연계 혁신과정은 원고에도 혁신교과목 실적이 "해당사항없음"이라 편성 요건 충족 여부가 불확실합니다.</span></li>
+          <li><span class="pill warn">편중</span><span>학기 부담이 3-1(17학점)에 몰리고 4-2(5학점)에서 줄어듭니다.</span></li>
+          <li><span class="pill good">정정</span><span>원고의 오류 7건(역량 순서, 로드맵 합계 3건, 실습 교과목 표 2건, 자격 트랙 구분)을 수정본에 반영했습니다.</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>확인이 필요한 사항</h3>
+        <ul class="plain find">
+          <li><span class="pill crit">자료</span><span>교무처 개발보고서 양식(260506.hwp)이 0바이트로 올라왔습니다. 다시 올려 주셔야 양식 대조가 가능합니다.</span></li>
+          <li><span class="pill warn">확인</span><span>스포츠경영관리사의 국가공인·민간 구분, 등급 "(2급)", 발급기관.</span></li>
+          <li><span class="pill warn">확인</span><span>혁신교과목 인정기간: 원고 "~2025-1" / 양식 "~2026-1".</span></li>
+          <li><span class="pill warn">확인</span><span>이수기준의 "현장실습 3학점 이상"과 현장실습과정 "해당사항없음"이 서로 맞지 않습니다.</span></li>
+          <li><span class="pill warn">확인</span><span>위원회 명단: 음영배 위원 구분, 대학 소속 현장 전문가, 편성평가위원회 추가 위원.</span></li>
+          <li><span class="pill warn">확인</span><span>홈페이지 입력안과 영문명 25개 안 승인.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>근거: 미래라이프대학 교육과정 개발 연구(원고) 수정본, data/curriculum.json, validate.py · 2026. 10. 기준</footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const TRACKS=[
+ {n:"전공탐색트랙",g:0,c:9,th:9,pr:0,k:3},
+ {n:"코어1 스포츠경영",g:1,c:15,th:15,pr:0,k:5},
+ {n:"코어2 건강증진",g:1,c:17,th:17,pr:0,k:6},
+ {n:"코어3 스마트헬스케어",g:1,c:16,th:11,pr:5,k:6},
+ {n:"③-L 지역연계 혁신",g:2,c:7,th:4,pr:3,k:3},
+ {n:"③-U 통합실무",g:2,c:15,th:9,pr:6,k:6},
+ {n:"③-S 전문자격",g:2,c:4,th:2,pr:2,k:2}];
+const SEM=[["1-1",6,6,0],["1-2",3,6,0],["2-1",0,9,3],["2-2",0,9,3],["3-1",0,9,8],["3-2",0,4,4],["4-1",0,2,6],["4-2",0,3,2]];
+const GN=["전공탐색","전공코어","전공실무"], GC=["var(--s1)","var(--s2)","var(--s3)"];
+const VAL=[
+ ["good","트랙 구성 7개","선언 과목 수·학점과 실제 합계 일치"],
+ ["good","총 전공학점","83학점 (78~84)"],
+ ["good","코어트랙 수·합계","3개 · 48학점 (2~3개, 30 이상)"],
+ ["good","코어 트랙별 학점","15 / 17 / 16 (15~21)"],
+ ["good","실무트랙 유형 수·합계","3개 · 26학점 (2개 이상, 25 이상)"],
+ ["good","원격 비율(과목 수)","31/31 = 100% (80% 이상)"],
+ ["good","용어 통일","'특수체육'으로 통일됨"],
+ ["warn","실험·실습 편성 비율","과목 51.6% / 학점 47.0% (20% 이하) — 예외(승인)"],
+ ["warn","③-L 지역연계 혁신과정","혁신교과목 실적 요건 — 예외(승인)"]];
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e};
+const tip=document.getElementById("tip");
+function hover(node,html){
+  node.addEventListener("mousemove",e=>{tip.innerHTML=html;tip.hidden=false;
+    const x=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8);tip.style.left=x+"px";tip.style.top=(e.clientY+14)+"px"});
+  node.addEventListener("mouseleave",()=>tip.hidden=true);
+}
+// 4px rounded data-end anchored to the baseline (left for horizontal bars)
+function hbar(x,y,w,h,r=4){if(w<=0)return"";r=Math.min(r,w,h/2);return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`}
+function vbar(x,y,w,h,r=4){if(h<=0)return"";r=Math.min(r,h,w/2);return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`}
+
+(function trackChart(){
+  const W=520,L=150,R=40,rowH=30,top=8,H=top+TRACKS.length*rowH+28,max=24,sx=v=>L+v/max*(W-L-R);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"과정별 편성 학점 막대 차트"});
+  const y0=top,y1=top+TRACKS.length*rowH;
+  s.append(el("rect",{class:"band",x:sx(15),y:top+rowH*1,width:sx(21)-sx(15),height:rowH*3}));
+  for(let v=0;v<=24;v+=6){s.append(el("line",{class:"gl",x1:sx(v),x2:sx(v),y1:y0,y2:y1}));s.append(el("text",{x:sx(v),y:y1+16,"text-anchor":"middle"},v))}
+  TRACKS.forEach((t,i)=>{const y=top+i*rowH+7,h=rowH-14;
+    s.append(el("text",{x:L-8,y:y+h/2+4,"text-anchor":"end"},t.n));
+    const p=el("path",{d:hbar(sx(0),y,sx(t.c)-sx(0),h),fill:GC[t.g]});s.append(p);
+    hover(p,`<b>${t.n}</b><br>${t.k}과목 · ${t.c}학점`);
+    s.append(el("text",{class:"val",x:sx(t.c)+6,y:y+h/2+4},t.c));});
+  s.append(el("line",{class:"ax",x1:sx(0),x2:sx(0),y1:y0,y2:y1}));
+    document.getElementById("c-track").append(s);
+})();
+
+(function hoursChart(){
+  const W=520,L=150,R=40,rowH=30,top=8,H=top+TRACKS.length*rowH+28,max=18,sx=v=>L+v/max*(W-L-R);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"과정별 이론·실습 시수 누적 막대"});
+  const y1=top+TRACKS.length*rowH;
+  for(let v=0;v<=18;v+=6){s.append(el("line",{class:"gl",x1:sx(v),x2:sx(v),y1:top,y2:y1}));s.append(el("text",{x:sx(v),y:y1+16,"text-anchor":"middle"},v))}
+  TRACKS.forEach((t,i)=>{const y=top+i*rowH+7,h=rowH-14;
+    s.append(el("text",{x:L-8,y:y+h/2+4,"text-anchor":"end"},t.n));
+    const a=el("rect",{class:"m",x:sx(0),y,width:sx(t.th)-sx(0)-(t.pr?1:0),height:h,fill:"var(--s1)",rx:t.pr?0:3});s.append(a);
+    hover(a,`<b>${t.n}</b><br>이론 ${t.th}시간`);
+    if(t.pr){const b=el("path",{d:hbar(sx(t.th)+1,y,sx(t.th+t.pr)-sx(t.th)-1,h),fill:"var(--s2)"});s.append(b);
+      hover(b,`<b>${t.n}</b><br>실험·실습 ${t.pr}시간 (${Math.round(t.pr/(t.th+t.pr)*100)}%)`);}
+    s.append(el("text",{class:"val",x:sx(t.th+t.pr)+6,y:y+h/2+4},t.pr?`${t.th}+${t.pr}`:t.th));});
+  s.append(el("line",{class:"ax",x1:sx(0),x2:sx(0),y1:top,y2:y1}));
+    document.getElementById("c-hours").append(s);
+})();
+
+(function ratioChart(){
+  const rows=[["실험·실습 비율 (과목 수)",51.6,20,"이하","16/31과목"],["실험·실습 비율 (학점)",47.0,20,"이하","39/83학점"],["원격 운영 비율 (과목 수)",100,80,"이상","31/31과목"]];
+  const W=900,L=190,R=60,rowH=40,top=10,H=top+rows.length*rowH+26,sx=v=>L+v/100*(W-L-R);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"기준 대비 비율"});
+  const y1=top+rows.length*rowH;
+  for(let v=0;v<=100;v+=20){s.append(el("line",{class:"gl",x1:sx(v),x2:sx(v),y1:top,y2:y1}));s.append(el("text",{x:sx(v),y:y1+16,"text-anchor":"middle"},v+"%"))}
+  rows.forEach((r,i)=>{const y=top+i*rowH+10,h=rowH-20;
+    s.append(el("text",{x:L-10,y:y+h/2+4,"text-anchor":"end"},r[0]));
+    const p=el("path",{d:hbar(sx(0),y,sx(r[1])-sx(0),h),fill:"var(--s1)"});s.append(p);
+    hover(p,`<b>${r[0]}</b><br>${r[1]}% (${r[4]})<br>기준 ${r[2]}% ${r[3]}`);
+    s.append(el("line",{class:"ref",x1:sx(r[2]),x2:sx(r[2]),y1:y-5,y2:y+h+5}));
+    s.append(el("text",{class:"val",x:Math.min(sx(r[1])+6,W-R+4),y:y+h/2+4},r[1].toFixed(1)+"%"));});
+  s.append(el("line",{class:"ax",x1:sx(0),x2:sx(0),y1:top,y2:y1}));
+  document.getElementById("c-ratio").append(s);
+})();
+
+(function semChart(){
+  const W=900,L=40,R=16,top=16,B=34,H=260,max=18,cw=(W-L-R)/SEM.length,bw=Math.min(54,cw*.56),sy=v=>H-B-v/max*(H-B-top);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"학기별 이수 학점 누적 막대"});
+  for(let v=0;v<=18;v+=6){s.append(el("line",{class:"gl",x1:L,x2:W-R,y1:sy(v),y2:sy(v)}));s.append(el("text",{x:L-8,y:sy(v)+4,"text-anchor":"end"},v))}
+  SEM.forEach((r,i)=>{const x=L+i*cw+(cw-bw)/2;let acc=0;const tot=r[1]+r[2]+r[3];
+    const segs=[1,2,3].filter(k=>r[k]>0);
+    segs.forEach((k,j)=>{const v=r[k],y=sy(acc+v),h=sy(acc)-sy(acc+v);const last=j===segs.length-1;
+      const node=last?el("path",{d:vbar(x,y,bw,h-(acc?2:0)),fill:GC[k-1]}):el("rect",{x,y,width:bw,height:h-(acc?2:0),fill:GC[k-1]});
+      s.append(node);hover(node,`<b>${r[0]} 학기</b><br>${GN[k-1]} ${v}학점<br>학기 합계 ${tot}학점`);acc+=v;});
+    s.append(el("text",{class:"val",x:x+bw/2,y:sy(tot)-6,"text-anchor":"middle"},tot));
+    s.append(el("text",{x:x+bw/2,y:H-B+18,"text-anchor":"middle"},r[0]));});
+  s.append(el("line",{class:"ax",x1:L,x2:W-R,y1:sy(0),y2:sy(0)}));
+  document.getElementById("c-sem").append(s);
+  const t=document.getElementById("t-sem");
+  t.innerHTML=`<thead><tr><th>학기</th><th class="num">전공탐색</th><th class="num">전공코어</th><th class="num">전공실무</th><th class="num">합계</th></tr></thead><tbody>`+
+    SEM.map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td class="num">${r[1]+r[2]+r[3]}</td></tr>`).join("")+
+    `<tr><td><b>계</b></td><td class="num">9</td><td class="num">48</td><td class="num">26</td><td class="num"><b>83</b></td></tr></tbody>`;
+})();
+
+document.getElementById("t-val").innerHTML=VAL.map(v=>`<tr><td><span class="pill ${v[0]}">${v[0]==="good"?"✓ 통과":"! 예외(승인)"}</span></td><td>${v[1]}</td><td class="num" style="text-align:left">${v[2]}</td></tr>`).join("");
+</script>
