@@ -1,0 +1,312 @@
+<title>스포츠웰니스경영학 치앙라이 여름 집중수업</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: v2 토요일 운영 진단의 후속 — 3가지 수업 방식 → 구성안 선택 → 지표 → 연차 이수 흐름 → 여름 3회 계획 → 장소 활용 → 10일 일정 → 과목 이동표 → 확인사항 */
+:root{
+  --bg:#f6f7f8; --surface:#ffffff; --line:#dfe3e8; --grid:#eceff2; --soft:#f0f3f6;
+  --fg:#131820; --fg2:#4a5260; --fg3:#7a8290; --accent:#1d4f8f;
+  --onl:#2a78d6; --sat:#eb6834; --thai:#1baf7a;
+  --good:#1f7a4a; --good-bg:#e3f3ea; --warn:#a05a00; --warn-bg:#fdf0d8; --crit:#b42318; --crit-bg:#fde7e4;
+  --f-display:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31; --soft:#22262c;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --onl:#3987e5; --sat:#d95926; --thai:#199e70;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31; --soft:#22262c;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --onl:#3987e5; --sat:#d95926; --thai:#199e70;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;padding:0 16px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 64px;display:grid;gap:28px}
+header{display:grid;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--fg3)}
+.ver{display:inline-block;font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:6px;color:var(--fg2)}
+h1{font-family:var(--f-display);font-size:clamp(24px,4vw,34px);line-height:1.25;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:20px;margin:0;text-wrap:balance}
+h3{font-size:15px;margin:0;font-weight:600}
+p{margin:0}
+.lede{color:var(--fg2);max-width:70ch}
+.note{font-size:13px;color:var(--fg2)}
+section{display:grid;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px;min-width:0;align-content:start}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:6px;align-content:start}
+.kpi .v{font-family:var(--f-mono);font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k{font-size:13px;color:var(--fg2)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;width:fit-content;white-space:nowrap}
+.pill.good{background:var(--good-bg);color:var(--good)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.crit{background:var(--crit-bg);color:var(--crit)} .pill.info{background:var(--soft);color:var(--fg2)}
+.mode{border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:6px;background:var(--surface)}
+.mode .tag{font-family:var(--f-mono);font-size:12px}
+.mode.o{border-top:4px solid var(--onl)} .mode.s{border-top:4px solid var(--sat)} .mode.t{border-top:4px solid var(--thai)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;width:fit-content}
+.seg button{font:inherit;font-size:14px;border:0;background:var(--surface);color:var(--fg2);padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--fg2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:440px}
+.chart text{fill:var(--fg2);font-family:var(--f-body);font-size:12px}
+.chart .val{fill:var(--fg);font-family:var(--f-mono);font-size:12px}
+.chart .gl{stroke:var(--grid)} .chart .ax{stroke:var(--line)}
+.summer{display:grid;gap:10px;border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--surface)}
+.summer .yr{font-family:var(--f-mono);font-size:12px;color:var(--thai)}
+.summer h3{font-family:var(--f-display);font-size:17px}
+.course{display:grid;gap:2px;padding:8px 10px;border-radius:6px;background:var(--soft)}
+.course .nm{font-weight:600;font-size:14px}
+.course .was{font-size:12px;color:var(--fg3)}
+.tablewrap{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:14px}
+table.data th,table.data td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data th{font-size:12px;color:var(--fg3);font-weight:600;white-space:nowrap}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--thai)}
+.dot.half{background:none;border:2px solid var(--thai)}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.day{border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:4px;background:var(--surface)}
+.day .d{font-family:var(--f-mono);font-size:12px;color:var(--fg3)}
+.day b{font-size:14px}
+ul.plain{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.plain li{display:grid;grid-template-columns:4.2em 1fr;gap:10px;align-items:start}
+ul.plain .pill{justify-content:center;width:auto}
+#tip{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;line-height:1.45;z-index:10}
+footer{font-size:12px;color:var(--fg3)}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">미래라이프대학 · 2027학년도 전공교육과정 개발 <span class="ver">v3</span></span>
+    <h1>스포츠웰니스경영학 치앙라이 여름 집중수업</h1>
+    <p class="lede">v2 토요일 운영안에 매년 여름학기 태국 치앙라이 2주 집중수업을 더한 편성안입니다. 1~3학년 여름마다 6학점씩, 파크골프와 골프를 주제로 기존 과목을 옮겨 운영하므로 전공 83학점은 그대로입니다.</p>
+  </header>
+
+  <section>
+    <h2>세 가지 수업 방식</h2>
+    <div class="grid3">
+      <div class="mode o"><span class="tag" style="color:var(--onl)">온라인 · 연중</span><h3>비실시간·실시간 온라인</h3><p class="note">탐색·코어 이론 과목 전체, 실습 과목의 사전학습과 사후 성찰, 여름 출국 전 사전학습</p></div>
+      <div class="mode s"><span class="tag" style="color:var(--sat)">토요일 · 정규학기</span><h3>국내 토요일 집중실습</h3><p class="note">실무트랙 블렌디드 과목의 장비 실습, 시연 평가, 지역기관 현장 활동</p></div>
+      <div class="mode t"><span class="tag" style="color:var(--thai)">치앙라이 · 매년 여름</span><h3>2주 현지 집중수업</h3><p class="note">골프장·파크골프장·협력기관에서 6학점(2과목 또는 3과목) 현장 수행과 평가</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2학년 여름 구성안</h2>
+    <div class="panel">
+      <div class="seg" role="group" aria-label="2학년 여름 구성안">
+        <button type="button" id="bA" aria-pressed="true">A안 · 골프 동작 3과목</button>
+        <button type="button" id="bB" aria-pressed="false">B안 · 기능평가 2과목</button>
+      </div>
+      <p class="note" id="planNote"></p>
+    </div>
+  </section>
+
+  <section aria-label="결과 지표">
+    <div class="kpis">
+      <div class="kpi"><span class="k">여름 치앙라이로 옮긴 과목</span><span class="v" id="k1">–</span><span class="pill info" id="k1s">–</span></div>
+      <div class="kpi"><span class="k">원격 비율 (과목 수, 기준 80% 이상)</span><span class="v" id="k2">–</span><span class="pill" id="k2s">–</span></div>
+      <div class="kpi"><span class="k">정규학기 최대 학점</span><span class="v" id="k3">–</span><span class="pill good" id="k3s">–</span></div>
+      <div class="kpi"><span class="k">학생 1인 대면 시간 (4년)</span><span class="v" id="k4">–</span><span class="pill info" id="k4s">–</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>연차별 이수 흐름</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>학기별 전공 학점 <span class="note">(단위: 학점)</span></h3>
+        <div class="legend"><span><i style="background:var(--onl)"></i>정규학기 (온라인·토요일)</span><span><i style="background:var(--thai)"></i>여름학기 치앙라이</span></div>
+        <div class="chart" id="c-term"></div>
+        <p class="note" id="n-term"></p>
+      </div>
+      <div class="panel">
+        <h3>4년 수업시간 구성 <span class="note">(전공 83학점 × 15시간)</span></h3>
+        <div class="legend"><span><i style="background:var(--onl)"></i>온라인</span><span><i style="background:var(--sat)"></i>국내 토요일</span><span><i style="background:var(--thai)"></i>치앙라이 현지</span></div>
+        <div class="chart" id="c-mix"></div>
+        <p class="note">여름 1회당 6학점 90시간을 출국 전 온라인 사전학습 30시간과 현지 60시간(10일 × 6시간)으로 나눴습니다. 토요일은 과목당 4시간으로 v2 기본 가정을 따랐습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>여름 3회 집중수업 계획</h2>
+    <div class="grid3" id="summers"></div>
+    <p class="note">과목명 뒤 【안】은 파크골프·골프 연계를 드러내도록 바꾼 이름입니다. 원래 이름을 유지하고 수업 사례만 골프로 운영해도 됩니다.</p>
+  </section>
+
+  <section>
+    <h2>현지 장소 활용</h2>
+    <div class="panel">
+      <div class="legend"><span><span class="dot"></span>&nbsp;주 활동 장소</span><span><span class="dot half"></span>&nbsp;보조 활용</span></div>
+      <div class="tablewrap"><table class="data" id="t-venue"></table></div>
+      <p class="note">협력 기관명과 계약 조건은 아직 받지 못해 장소 유형으로만 적었습니다. 기관 정보를 주시면 시설명, 수용 인원, 사용 시간대를 채워 넣겠습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>현지 10일 운영 틀 (매년 공통)</h2>
+    <div class="panel">
+      <div class="days">
+        <div class="day"><span class="d">1일차</span><b>입국·안전교육</b><span class="note">오리엔테이션, 폭염·우천 대응, 보험·응급 연락체계</span></div>
+        <div class="day"><span class="d">2~4일차</span><b>과목 1 현장 수행</b><span class="note">오전 강의실 정리 2시간, 오후 현장 실습 4시간</span></div>
+        <div class="day"><span class="d">5일차</span><b>중간 점검</b><span class="note">과목 1 수행평가, 실습 일지·성찰</span></div>
+        <div class="day"><span class="d">6~8일차</span><b>과목 2(·3) 현장 수행</b><span class="note">골프장·파크골프장 측정, 프로그램 시연</span></div>
+        <div class="day"><span class="d">9일차</span><b>통합 프로젝트</b><span class="note">현지 파크골프 친선 프로그램 운영 등 과목 통합 과제</span></div>
+        <div class="day"><span class="d">10일차</span><b>최종 평가·발표</b><span class="note">시연 평가, 결과 발표, 포트폴리오 등록</span></div>
+      </div>
+      <p class="note">하루 6시간 × 10일 = 60시간입니다. 주말 이틀은 수업 시간에서 뺐고, 우천 시 실내 측정·강의로 바꾸는 예비 일정을 둡니다. 귀국 후 2주 안에 온라인 사후 성찰을 제출합니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>과목 이동표</h2>
+    <div class="panel">
+      <div class="tablewrap"><table class="data">
+        <thead><tr><th>과목 (원고)</th><th>트랙</th><th class="num">학점</th><th>원래 학기</th><th>변경</th><th>운영 방식 변화</th></tr></thead>
+        <tbody id="t-move"></tbody>
+      </table></div>
+      <p class="note">트랙과 학점은 바뀌지 않아 트랙별 학점 기준(코어 15~21, 실무 25 이상)은 그대로 충족합니다. 선수 과목 순서도 확인했습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>도출 결과와 확인할 사항</h2>
+    <div class="grid2">
+      <div class="panel"><h3>도출 결과 <span class="note" id="fplan"></span></h3><ul class="plain" id="findings"></ul></div>
+      <div class="panel"><h3>확인이 필요한 사항</h3>
+        <ul class="plain">
+          <li><span class="pill crit">자료</span><span>치앙라이 협력 기관의 이름, 시설(골프장·파크골프장·강의실), 수용 인원, 비용 조건.</span></li>
+          <li><span class="pill crit">규정</span><span>해외 현지 수업의 학점 인정, 계절학기 해외 집중이수 근거, 원격 비율 산정 시 여름 집중수업 분류(원격·대면).</span></li>
+          <li><span class="pill warn">결정</span><span>1~3학년 의무 참여 시, 출국이 어려운 학생(직장·가족 돌봄·건강)을 위한 국내 대체 경로.</span></li>
+          <li><span class="pill warn">비용</span><span>항공·숙박·현지 이동비의 부담 주체와 장학 지원 가능 여부. 지역 재원(RISE)의 해외 사용 가능 여부.</span></li>
+          <li><span class="pill warn">안전</span><span>해외 여행자보험과 실습 중 상해 보장, 북부 태국 여름철 폭염·우기 대응, 입국 요건.</span></li>
+          <li><span class="pill warn">과목명</span><span>과목명 변경 시 나노디그리 1 구성 과목(AI기반스포츠소비자분석및행사기획) 명칭도 함께 바뀝니다.</span></li>
+          <li><span class="pill info">표기</span><span>지명은 "치앙라이(Chiang Rai)"로 적었습니다. 문서에 쓸 표기를 정해 주세요.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>근거: 연구 원고 수정본 교과목 총괄표·운영 원칙, data/curriculum.json, v2 토요일 운영 진단 기본 가정 · v3 · 2026. 10.</footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const CR={"시니어웰니스프로그램론":[3,"코어2 건강증진","2-2",0],"스포츠시설경영론":[3,"코어1 스포츠경영","2-2",0],
+"AI기반골프트레이닝과움직임분석":[2,"코어3 스마트헬스케어","4-1",1],"EMG기반운동기능평가처방론":[2,"코어3 스마트헬스케어","3-2",1],
+"퍼스널트레이닝실습":[2,"③-U 통합실무","3-1",1],"스포츠창업인큐베이팅":[3,"③-U 통합실무","3-1",1],
+"AI기반스포츠소비자분석및행사기획":[3,"③-U 통합실무","2-2",1],"기능해부학기반근육기능평가":[3,"코어3 스마트헬스케어","2-2",1],
+"웨어러블데이터활용운동강도및피로평가법":[3,"코어3 스마트헬스케어","3-1",1],"스포츠법규와윤리":[3,"코어1 스포츠경영","3-1",0],"스포츠심리상담론":[2,"코어2 건강증진","3-2",0]};
+const NEWNAME={"시니어웰니스프로그램론":"파크골프기반시니어웰니스프로그램론","스포츠시설경영론":"골프·파크골프시설경영론",
+"스포츠창업인큐베이팅":"골프·파크골프관광창업인큐베이팅","AI기반스포츠소비자분석및행사기획":"AI기반골프관광소비자분석및국제행사기획",
+"기능해부학기반근육기능평가":"골프스윙기능해부학과근육기능평가","웨어러블데이터활용운동강도및피로평가법":"웨어러블기반골프라운드운동강도및피로평가"};
+const FOCUS={"시니어웰니스프로그램론":"현지 파크골프장에서 시니어 대상 웰니스 프로그램 설계·시연",
+"스포츠시설경영론":"골프장·파크골프장 운영 구조, 코스 관리, 회원·요금 체계 현장 분석",
+"AI기반골프트레이닝과움직임분석":"드라이빙 레인지 스윙 촬영과 AI 동작 분석",
+"EMG기반운동기능평가처방론":"스윙 근전도(EMG) 측정과 기능 평가·처방",
+"퍼스널트레이닝실습":"골프 피트니스 프로그램 지도·시연 평가",
+"스포츠창업인큐베이팅":"골프·파크골프 관광 상품 사업모델 현장 검증과 피칭",
+"AI기반스포츠소비자분석및행사기획":"골프 관광 소비자 조사와 현지 친선 대회 기획",
+"기능해부학기반근육기능평가":"스윙 동작의 기능해부학 분석과 근육기능 평가",
+"웨어러블데이터활용운동강도및피로평가법":"라운드 중 웨어러블 측정으로 더위 속 운동강도·피로 평가"};
+const SUM={
+ S1:{yr:"1학년 여름",th:"파크골프 입문 · 시니어 웰니스 · 시설경영",c:["시니어웰니스프로그램론","스포츠시설경영론"]},
+ A2:{yr:"2학년 여름",th:"골프 동작 분석 · 근기능 · 골프 피트니스",c:["AI기반골프트레이닝과움직임분석","EMG기반운동기능평가처방론","퍼스널트레이닝실습"]},
+ B2:{yr:"2학년 여름",th:"골프 스윙 기능평가 · 라운드 측정",c:["기능해부학기반근육기능평가","웨어러블데이터활용운동강도및피로평가법"]},
+ S3:{yr:"3학년 여름",th:"골프·파크골프 관광 사업 · 국제 행사",c:["스포츠창업인큐베이팅","AI기반스포츠소비자분석및행사기획"]}};
+const PLAN={
+ A:{s2:"A2",extra:{"스포츠법규와윤리":"2-2"},
+    terms:[["1-1",12],["1-2",9],["여름1",6],["2-1",12],["2-2",6],["여름2",6],["3-1",9],["3-2",6],["여름3",6],["4-1",6],["4-2",5]],
+    inperson:7,sat:8,note:"A안은 골프 직결 과목(AI골프 동작분석, EMG, 퍼스널트레이닝) 3개를 2학년 여름에 묶습니다. 여름 과목을 대면으로 분류하면 원격 과목이 24/31(77.4%)로 80% 기준에 못 미칩니다."},
+ B:{s2:"B2",extra:{"스포츠법규와윤리":"2-2","스포츠심리상담론":"2-2"},
+    terms:[["1-1",12],["1-2",9],["여름1",6],["2-1",12],["2-2",5],["여름2",6],["3-1",8],["3-2",6],["여름3",6],["4-1",8],["4-2",5]],
+    inperson:6,sat:9,note:"B안은 2학년 여름을 3학점 2과목(기능해부학 근육기능평가, 웨어러블 운동강도 평가)으로 바꿔 골프 스윙·라운드 측정에 적용합니다. 원격 과목 25/31(80.6%)로 기준을 지킵니다. AI골프 동작분석은 4-1에 남습니다."}};
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},x)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;return e};
+const tip=$("tip");
+function hover(n,h){n.addEventListener("mousemove",e=>{tip.innerHTML=h;tip.hidden=false;tip.style.left=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8)+"px";tip.style.top=(e.clientY+14)+"px"});n.addEventListener("mouseleave",()=>tip.hidden=true)}
+function vbar(x,y,w,h,r=4){if(h<=0)return"";r=Math.min(r,h,w/2);return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`}
+const VENUES=[
+ ["골프장 (코스·드라이빙 레인지)","스윙 촬영·측정, 라운드 중 웨어러블 측정","half","full","full"],
+ ["파크골프장","시니어 프로그램 시연, 친선 대회 운영","full","half","full"],
+ ["협력 기관 강의실·세미나실","오전 이론 정리, 발표, 수행평가","full","full","full"],
+ ["골프 리조트·스포츠 관광 업체","시설 운영 견학, 소비자 조사, 사업모델 검증","full","","full"],
+ ["숙소 공용 공간","실습 일지, 팀 회의, 우천 대체 강의","half","half","half"]];
+
+let cur="A";
+function render(){
+  const P=PLAN[cur];$("bA").setAttribute("aria-pressed",cur==="A");$("bB").setAttribute("aria-pressed",cur==="B");
+  $("planNote").textContent=P.note;
+  const summers=[SUM.S1,SUM[P.s2],SUM.S3];
+  const moved=summers.flatMap(s=>s.c);
+  const remote=31-P.inperson, rpct=remote/31*100;
+  $("k1").textContent=moved.length+"과목";$("k1s").textContent="18학점 · 여름 3회";
+  $("k2").textContent=rpct.toFixed(1)+"%";$("k2s").className="pill "+(rpct>=80?"good":"crit");
+  $("k2s").textContent=rpct>=80?`✓ ${remote}/31 충족`:`✕ ${remote}/31 미달 (여름을 대면으로 볼 때)`;
+  const reg=P.terms.filter(t=>!t[0].startsWith("여름"));const mx=Math.max(...reg.map(t=>t[1]));
+  $("k3").textContent=mx+"학점";$("k3s").textContent="v2는 17학점(3-1)";
+  const thaiH=180,satH=P.sat*4,total=83*15,onl=total-thaiH-satH;
+  $("k4").textContent=(thaiH+satH)+"시간";$("k4s").textContent=`치앙라이 ${thaiH} · 토요일 ${satH}`;
+
+  // 학기별 학점
+  {const W=560,L=34,R=10,top=18,B=30,H=230,M=14,cw=(W-L-R)/P.terms.length,bw=Math.min(30,cw*.6),sy=v=>H-B-v/M*(H-B-top);
+   const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"학기별 전공 학점"});
+   for(let v=0;v<=M;v+=2){s.append(el("line",{class:"gl",x1:L,x2:W-R,y1:sy(v),y2:sy(v)}));s.append(el("text",{x:L-6,y:sy(v)+4,"text-anchor":"end"},v))}
+   P.terms.forEach((t,i)=>{const x=L+i*cw+(cw-bw)/2,su=t[0].startsWith("여름");
+     const p=el("path",{d:vbar(x,sy(t[1]),bw,sy(0)-sy(t[1])),fill:su?"var(--thai)":"var(--onl)"});s.append(p);
+     const cs=su?summers[+t[0].slice(2)-1].c:[];
+     hover(p,`<b>${t[0]}</b><br>${t[1]}학점${su?"<br>"+cs.join("<br>"):""}`);
+     s.append(el("text",{class:"val",x:x+bw/2,y:sy(t[1])-6,"text-anchor":"middle"},t[1]));
+     s.append(el("text",{x:x+bw/2,y:H-B+18,"text-anchor":"middle"},t[0]));});
+   s.append(el("line",{class:"ax",x1:L,x2:W-R,y1:sy(0),y2:sy(0)}));$("c-term").replaceChildren(s);
+   $("n-term").textContent=`정규학기는 최대 ${mx}학점으로 v2(3-1 17학점)보다 고르게 줄었습니다. 여름 3회 18학점은 전공 83학점의 ${(18/83*100).toFixed(1)}%입니다.`;}
+
+  // 시간 구성 100% 막대
+  {const W=560,L=10,R=10,H=110,y=24,h=34,sx=v=>L+v/total*(W-L-R);
+   const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"4년 수업시간 구성"});
+   const parts=[["온라인",onl,"var(--onl)"],["국내 토요일",satH,"var(--sat)"],["치앙라이 현지",thaiH,"var(--thai)"]];
+   let acc=0;parts.forEach((p,i)=>{const x=sx(acc),w=sx(acc+p[1])-sx(acc)-(i<2?2:0);
+     const r=el("rect",{x,y,width:Math.max(0,w),height:h,fill:p[2],rx:i===0||i===2?3:0});s.append(r);
+     hover(r,`<b>${p[0]}</b><br>${p[1]}시간 (${(p[1]/total*100).toFixed(1)}%)`);
+     acc+=p[1];});
+   s.append(el("text",{class:"val",x:L,y:y+h+22},`온라인 ${onl}시간 ${(onl/total*100).toFixed(1)}%`));
+   s.append(el("text",{class:"val",x:W-R,y:y+h+22,"text-anchor":"end"},`토요일 ${satH} · 치앙라이 ${thaiH}시간`));
+   s.append(el("text",{x:L,y:14},`총 ${total}시간`));
+   $("c-mix").replaceChildren(s);}
+
+  // 여름 카드
+  $("summers").innerHTML=summers.map((S,i)=>`<div class="summer"><span class="yr">여름 ${i+1} · ${S.yr} · 2주 6학점</span><h3>${S.th}</h3>`+
+    S.c.map(c=>`<div class="course"><span class="nm">${NEWNAME[c]?NEWNAME[c]+" 【안】":c}</span>${NEWNAME[c]?`<span class="was">원 과목명: ${c}</span>`:""}<span class="was">${CR[c][1]} · ${CR[c][0]}학점 · 원래 ${CR[c][2]}</span><span class="note">${FOCUS[c]}</span></div>`).join("")+`</div>`).join("");
+
+  // 장소표
+  const dot=v=>v==="full"?'<span class="dot" title="주 활동 장소"></span>':v==="half"?'<span class="dot half" title="보조 활용"></span>':"";
+  $("t-venue").innerHTML=`<thead><tr><th>장소 유형</th><th>쓰임</th><th>여름 1</th><th>여름 2</th><th>여름 3</th></tr></thead><tbody>`+
+    VENUES.map(v=>`<tr><td>${v[0]}</td><td>${v[1]}</td><td>${dot(v[2])}</td><td>${dot(v[3])}</td><td>${dot(v[4])}</td></tr>`).join("")+"</tbody>";
+
+  // 이동표
+  const rows=[];summers.forEach((S,i)=>S.c.forEach(c=>rows.push([c,CR[c],`여름 ${i+1} (${S.yr})`,CR[c][3]?"블렌디드·원격 → 치앙라이 현지 수행":"비실시간 온라인 → 사전학습 + 치앙라이 현지"])));
+  Object.entries(P.extra).forEach(([c,s])=>rows.push([c,CR[c],s+" (정규학기)","학기 부담 조정, 온라인 유지"]));
+  $("t-move").innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1][1]}</td><td class="num">${r[1][0]}</td><td>${r[1][2]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("");
+
+  // 도출 결과
+  $("fplan").textContent=`(${cur}안)`;
+  const F=[["good","학점","전공 83학점과 트랙별 학점은 바뀌지 않습니다. 과목의 이수 시기와 운영 방식만 바뀝니다."],
+   ["good","부담",`정규학기 최대 학점이 17에서 ${mx}로 줄어 직장을 다니는 학습자의 학기 부담이 고르게 됩니다.`],
+   [rpct>=80?"good":"crit","원격",rpct>=80?`원격 과목 ${remote}/31(${rpct.toFixed(1)}%)로 80% 기준을 지킵니다.`:`여름 과목을 대면으로 보면 원격 과목이 ${remote}/31(${rpct.toFixed(1)}%)로 80%에 못 미칩니다. 여름도 사전학습을 포함한 블렌디드로 인정받거나 B안을 써야 합니다.`],
+   ["info","토요일",`국내 토요일 대면 과목은 ${P.sat}개로 줄고, 학생 1인 대면 시간은 4년간 ${thaiH+satH}시간(치앙라이 ${thaiH}, 토요일 ${satH})입니다.`],
+   [cur==="A"?"good":"warn","코어3",cur==="A"?"v2에서 원격으로만 남았던 EMG·AI골프 장비 실습이 현지 대면으로 확인됩니다.":"기능해부학·웨어러블 실습은 현지에서 확인되지만, EMG·AI골프 실습은 여전히 원격입니다."]];
+  $("findings").innerHTML=F.map(f=>`<li><span class="pill ${f[0]}">${f[1]}</span><span>${f[2]}</span></li>`).join("");
+}
+$("bA").addEventListener("click",()=>{cur="A";render()});
+$("bB").addEventListener("click",()=>{cur="B";render()});
+render();
+</script>

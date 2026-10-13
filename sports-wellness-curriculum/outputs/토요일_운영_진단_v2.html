@@ -1,0 +1,387 @@
+<title>스포츠웰니스경영학 토요일 운영 진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: v1 편성 진단 이어받음 — 운영 원칙 → 가정 설정(조작부) → 결과 지표 → 학기 달력 → 과목별 운영표 → 결석·대체 규정 → 확인사항 */
+:root{
+  --bg:#f6f7f8; --surface:#ffffff; --line:#dfe3e8; --grid:#eceff2; --soft:#f0f3f6;
+  --fg:#131820; --fg2:#4a5260; --fg3:#7a8290; --accent:#1d4f8f;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --sat:#eb6834; --onl:#2a78d6;
+  --good:#1f7a4a; --good-bg:#e3f3ea; --warn:#a05a00; --warn-bg:#fdf0d8; --crit:#b42318; --crit-bg:#fde7e4;
+  --f-display:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31; --soft:#22262c;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --sat:#d95926; --onl:#3987e5;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1b1e23; --line:#2e333b; --grid:#262a31; --soft:#22262c;
+  --fg:#eef1f5; --fg2:#b6bdc8; --fg3:#8a93a0; --accent:#8fb6ec;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --sat:#d95926; --onl:#3987e5;
+  --good:#6fd39b; --good-bg:#16301f; --warn:#f1b65a; --warn-bg:#33270f; --crit:#ff8a7a; --crit-bg:#3a1a17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;padding:0 16px}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 64px;display:grid;gap:28px}
+header{display:grid;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--fg3)}
+.ver{display:inline-block;font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-left:6px;color:var(--fg2)}
+h1{font-family:var(--f-display);font-size:clamp(24px,4vw,34px);line-height:1.25;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:20px;margin:0;text-wrap:balance}
+h3{font-size:15px;margin:0;font-weight:600}
+p{margin:0}
+.lede{color:var(--fg2);max-width:70ch}
+.note{font-size:13px;color:var(--fg2)}
+section{display:grid;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:14px;min-width:0;align-content:start}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:6px;align-content:start}
+.kpi .v{font-family:var(--f-mono);font-size:28px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k{font-size:13px;color:var(--fg2)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;width:fit-content;white-space:nowrap}
+.pill.good{background:var(--good-bg);color:var(--good)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.crit{background:var(--crit-bg);color:var(--crit)}
+.pill.info{background:var(--soft);color:var(--fg2)}
+/* 운영 사이클 */
+.cycle{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;counter-reset:st}
+.step{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:4px;background:var(--soft)}
+.step b{font-size:14px}
+.step .when{font-family:var(--f-mono);font-size:12px;color:var(--fg3)}
+.step.sat{border-color:var(--sat);background:var(--surface)}
+.step.sat .when{color:var(--sat)}
+/* 조작부 */
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.ctl{display:grid;gap:6px}
+.ctl label{font-size:13px;color:var(--fg2)}
+.ctl .row{display:flex;align-items:center;gap:10px}
+.ctl input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.ctl output{font-family:var(--f-mono);font-size:14px;min-width:4.5em;text-align:right}
+.ctl input[type=number]{width:6em;font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.toggle{display:flex;gap:8px;align-items:center;font-size:14px}
+.toggle input{accent-color:var(--accent);width:18px;height:18px}
+button.reset{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer;width:fit-content}
+button.reset:hover{background:var(--soft)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--fg2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:420px}
+.chart text{fill:var(--fg2);font-family:var(--f-body);font-size:12px}
+.chart .val{fill:var(--fg);font-family:var(--f-mono);font-size:12px}
+.chart .gl{stroke:var(--grid)} .chart .ax{stroke:var(--line)}
+/* 달력 */
+.cal{overflow-x:auto}
+.cal table{border-collapse:separate;border-spacing:3px;font-size:12px;min-width:640px}
+.cal th{font-weight:500;color:var(--fg3);font-family:var(--f-mono);text-align:center;padding:2px}
+.cal th.sem{text-align:left;padding-right:8px;color:var(--fg2);font-family:var(--f-body);white-space:nowrap}
+.cal td{width:30px;height:26px;border-radius:4px;background:var(--soft);text-align:center;font-family:var(--f-mono);color:#fff;font-size:11px}
+.cal td.on{background:var(--sat)}
+.cal td.exam{background:var(--grid);color:var(--fg3)}
+.tablewrap{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:14px}
+table.data th,table.data td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data th{font-size:12px;color:var(--fg3);font-weight:600;white-space:nowrap}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+ul.plain{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.plain li{display:grid;grid-template-columns:4.2em 1fr;gap:10px;align-items:start}
+ul.plain .pill{justify-content:center;width:auto}
+#tip{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;max-width:240px;line-height:1.45;z-index:10}
+footer{font-size:12px;color:var(--fg3)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">미래라이프대학 · 2027학년도 전공교육과정 개발 <span class="ver">v2</span></span>
+    <h1>스포츠웰니스경영학 토요일 운영 진단</h1>
+    <p class="lede">v1 편성 진단에 이어, 대면 수업을 토요일에만 열고 나머지는 온라인으로 대체하는 운영 방식을 점검합니다. 아래 가정을 바꾸면 학기별 토요일 횟수, 대면 시간, 분반과 교원 출강 부담이 다시 계산됩니다.</p>
+  </header>
+
+  <section>
+    <h2>운영 원칙 (연구 원고 기준)</h2>
+    <div class="panel">
+      <p class="note">실험·실습 시수가 있는 과목은 한 학기를 아래 네 단계로 운영합니다. 대면은 3단계 토요일 집중실습뿐이고, 나머지는 모두 온라인입니다.</p>
+      <div class="cycle">
+        <div class="step"><span class="when">1단계 · 평일 비실시간</span><b>온라인 사전학습</b><span class="note">이론 강의, 시연 영상, 안전·개인정보 교육</span></div>
+        <div class="step"><span class="when">2단계 · 평일 저녁 실시간</span><b>화상 지도</b><span class="note">화상 시연, 자세 피드백, 개인 기기 연동 실습</span></div>
+        <div class="step sat"><span class="when">3단계 · 토요일 대면</span><b>집중실습·수행평가</b><span class="note">장비 실습, 시연 평가, 지역기관 현장 활동</span></div>
+        <div class="step"><span class="when">4단계 · 온라인</span><b>사후 성찰</b><span class="note">결과물 제출, 전공 포트폴리오 관리</span></div>
+      </div>
+      <p class="note">탐색·코어트랙 20과목은 비실시간 온라인이 원칙입니다. 다만 코어3 스마트헬스케어의 실습 과목 5개를 토요일 대면에 넣을지는 아직 정해지지 않아, 아래에서 선택할 수 있게 했습니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>운영 가정</h2>
+    <div class="panel">
+      <div class="controls">
+        <div class="ctl"><label for="h">과목당 토요일 대면 시간 (실습 시수 15시간 중)</label>
+          <div class="row"><input type="range" id="h" min="2" max="15" step="1" value="4"><output id="ho">4시간</output></div></div>
+        <div class="ctl"><label for="d">토요일 하루 최대 수업 시간</label>
+          <div class="row"><input type="range" id="d" min="4" max="8" step="1" value="8"><output id="do">8시간</output></div></div>
+        <div class="ctl"><label for="n">학년당 학생 수</label>
+          <div class="row"><input type="number" id="n" min="10" max="200" step="5" value="50"><span class="note">명</span></div></div>
+        <div class="ctl"><label for="cap">실습실 1회 수용 인원</label>
+          <div class="row"><input type="number" id="cap" min="5" max="100" step="5" value="20"><span class="note">명</span></div></div>
+        <div class="ctl"><span class="note">코어3 실습 과목 5개</span>
+          <label class="toggle" for="c3"><input type="checkbox" id="c3"> 토요일 대면에 포함</label></div>
+        <div class="ctl"><span class="note">&nbsp;</span><button class="reset" id="reset" type="button">기본 가정으로 되돌리기</button></div>
+      </div>
+      <p class="note">기본값은 검토용 가정입니다. 과목당 4시간(실습 시수의 약 27%), 하루 최대 8시간(오전·오후 2과목), 학년당 50명, 실습실 20명으로 두었습니다. 학생 수는 주간 보고의 모집 목표(50~60명)를 참고했고, 실습실 정원은 확인되지 않은 값입니다.</p>
+    </div>
+  </section>
+
+  <section aria-label="결과 지표">
+    <div class="kpis">
+      <div class="kpi"><span class="k">토요일 대면 과목</span><span class="v" id="k1">11</span><span class="pill info" id="k1s">실무트랙 11과목</span></div>
+      <div class="kpi"><span class="k">4년간 학생 1인 토요일 출석</span><span class="v" id="k2">–</span><span class="pill info" id="k2s">학기당 평균</span></div>
+      <div class="kpi"><span class="k">총 수업시간 중 온라인 비율</span><span class="v" id="k3">–</span><span class="pill good" id="k3s">시간 기준</span></div>
+      <div class="kpi"><span class="k">학기 최대 토요일 수</span><span class="v" id="k4">–</span><span class="pill info" id="k4s">–</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>학기별 토요일 대면</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>학생 1인 토요일 출석 횟수 <span class="note">(단위: 회)</span></h3>
+        <div class="legend"><span><i style="background:var(--sat)"></i>토요일 대면</span></div>
+        <div class="chart" id="c-sat"></div>
+        <p class="note" id="n-sat"></p>
+      </div>
+      <div class="panel">
+        <h3>학기별 수업시간 구성 <span class="note">(단위: 시간, 15주 기준)</span></h3>
+        <div class="legend"><span><i style="background:var(--onl)"></i>온라인 (이론+실습 대체)</span><span><i style="background:var(--sat)"></i>토요일 대면</span></div>
+        <div class="chart" id="c-hrs"></div>
+        <p class="note">학점당 주 1시간, 15주로 계산했습니다. 대면 시간은 실습 시수 일부를 토요일로 옮긴 것이고, 이론 시수는 모두 온라인입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>학기 달력 (토요일 배치안)</h2>
+    <div class="panel">
+      <div class="legend"><span><i style="background:var(--sat)"></i>토요일 대면 (숫자는 그날 과목 수)</span><span><i style="background:var(--grid)"></i>중간·기말 주간</span><span><i style="background:var(--soft);outline:1px solid var(--line)"></i>온라인 주간</span></div>
+      <div class="cal" id="cal"></div>
+      <p class="note">1~4주는 사전학습 기간으로 비워 두고, 토요일을 5주차 이후 중간·기말 주간(8·15주)을 피해 고르게 배치했습니다. 같은 날 두 과목을 오전·오후로 묶으면 토요일 수가 줄어듭니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>분반과 교원 출강 부담</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>분반 계산</h3>
+        <div class="tablewrap"><table class="data"><tbody id="t-sec"></tbody></table></div>
+        <p class="note">원고는 실습 공간과 장비 정원을 고려해 복수의 주말 분반을 운영하도록 정하고 있습니다. 분반마다 같은 토요일 실습을 반복하므로 교원 출강 횟수가 분반 수만큼 늘어납니다.</p>
+      </div>
+      <div class="panel">
+        <h3>결석·대체 규정 (원고)</h3>
+        <ul class="plain">
+          <li><span class="pill info">공지</span><span>대면 일정, 장소, 준비물, 평가방법을 수강신청 전 또는 학기 시작 전에 공지합니다.</span></li>
+          <li><span class="pill info">분반</span><span>복수의 주말 분반을 운영해 학생이 토요일 일정을 고를 수 있게 합니다.</span></li>
+          <li><span class="pill info">보충</span><span>불가피하게 빠진 학생은 보충실습이나 다른 분반 참여로 대체합니다.</span></li>
+          <li><span class="pill warn">평가</span><span>수행능력 확인이 필요한 과목은 보고서로 대체하지 않고 같은 수준의 수행평가(시연, 자세 피드백)를 합니다.</span></li>
+          <li><span class="pill info">안전</span><span>측정자료는 비식별화하고, 기기 연동·트레이닝 지도 과목은 사전 안전교육과 개인정보·직업윤리 교육을 합니다.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>과목별 토요일·온라인 운영안</h2>
+    <div class="panel">
+      <div class="tablewrap"><table class="data">
+        <thead><tr><th>학기</th><th>과목</th><th>과정</th><th class="num">실습 시수</th><th class="num">토요일 대면</th><th>토요일에 하는 일</th><th>온라인 대체</th></tr></thead>
+        <tbody id="t-course"></tbody>
+      </table></div>
+      <p class="note">"토요일에 하는 일"은 원고의 과정별 운영방식을 바탕으로 만든 안입니다. 담당 교원 검토가 필요합니다.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>도출 결과와 확인할 사항</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>도출 결과 <span class="note">(현재 가정 기준)</span></h3>
+        <ul class="plain" id="findings"></ul>
+      </div>
+      <div class="panel">
+        <h3>확인이 필요한 사항</h3>
+        <ul class="plain">
+          <li><span class="pill crit">규정</span><span>원격수업 운영 비율과 출석 인정 기준에 대한 학칙·교육부 기준은 이 자료에 없습니다. 교무처 확인이 필요합니다.</span></li>
+          <li><span class="pill warn">결정</span><span>코어3 실습 과목 5개를 토요일 대면에 포함할지 정해야 합니다.</span></li>
+          <li><span class="pill warn">결정</span><span>과목당 토요일 대면 시간(현재 가정 4시간)과 하루 최대 수업 시간.</span></li>
+          <li><span class="pill warn">자료</span><span>실습실·장비 수용 인원과 실제 입학 정원.</span></li>
+          <li><span class="pill warn">확인</span><span>지역연계 과목의 토요일 현장 활동이 가능한지 지자체 체육시설·스포츠센터와 협의가 필요합니다.</span></li>
+          <li><span class="pill warn">확인</span><span>교원의 토요일 출강에 대한 근무·수당 기준과 실습 중 상해보험 적용.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>근거: 미래라이프대학 교육과정 개발 연구(원고) 수정본의 학과 운영 체제, data/curriculum.json · v1 편성 진단의 후속 버전 · 2026. 10.</footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+// 실습 시수가 있는 16과목 (원고 총괄표·로드맵)
+const C=[
+ {s:"2-1",n:"스포츠경영마케팅실무",t:"③-U 통합실무",g:"U"},
+ {s:"2-2",n:"AI기반스포츠소비자분석및행사기획",t:"③-U 통합실무",g:"U"},
+ {s:"2-2",n:"기능해부학기반근육기능평가",t:"코어3 스마트헬스케어",g:"C3"},
+ {s:"3-1",n:"커뮤니티스포츠기획",t:"③-L 지역연계",g:"L"},
+ {s:"3-1",n:"퍼스널트레이닝실습",t:"③-U 통합실무",g:"U"},
+ {s:"3-1",n:"스포츠창업인큐베이팅",t:"③-U 통합실무",g:"U"},
+ {s:"3-1",n:"웨어러블데이터활용운동강도및피로평가법",t:"코어3 스마트헬스케어",g:"C3"},
+ {s:"3-2",n:"스포츠이벤트기획실무",t:"③-L 지역연계",g:"L"},
+ {s:"3-2",n:"근육불균형보상패턴평가교정운동",t:"③-U 통합실무",g:"U"},
+ {s:"3-2",n:"EMG기반운동기능평가처방론",t:"코어3 스마트헬스케어",g:"C3"},
+ {s:"4-1",n:"지역체육행정실습",t:"③-L 지역연계",g:"L"},
+ {s:"4-1",n:"스포츠빅데이터분석실무",t:"③-U 통합실무",g:"U"},
+ {s:"4-1",n:"스포츠경영관리사실무",t:"③-S 전문자격",g:"S"},
+ {s:"4-1",n:"AI기반골프트레이닝과움직임분석",t:"코어3 스마트헬스케어",g:"C3"},
+ {s:"4-2",n:"건강운동관리사실무",t:"③-S 전문자격",g:"S"},
+ {s:"4-2",n:"AI기반시니어트레이닝과근기능관리",t:"코어3 스마트헬스케어",g:"C3"}];
+const ACT={
+ "스포츠경영마케팅실무":["협약기관 과제 마케팅안 발표·피드백","사례 분석, 마케팅 계획서 온라인 제출"],
+ "AI기반스포츠소비자분석및행사기획":["행사 기획안 시연과 팀 리허설","소비자 데이터 분석 실습(비식별 자료)"],
+ "기능해부학기반근육기능평가":["근육기능 평가 실기, 상호 측정","화상 시연, 측정 영상 제출"],
+ "커뮤니티스포츠기획":["지역 체육시설 방문, 프로그램 현장 점검","지역 사례 조사, 기획서 작성"],
+ "퍼스널트레이닝실습":["기구 지도 실기, 시연 평가","화상 시연·자세 피드백"],
+ "스포츠창업인큐베이팅":["사업계획 피칭, 현장 멘토링","온라인 창업 클리닉"],
+ "웨어러블데이터활용운동강도및피로평가법":["웨어러블 측정 실습, 장비 교정","개인 기기 연동 과제, 데이터 해석"],
+ "스포츠이벤트기획실무":["지역 스포츠행사 운영 참여","행사 기획·결과보고 온라인 제출"],
+ "근육불균형보상패턴평가교정운동":["보상패턴 평가·교정운동 실기 평가","화상 자세 피드백"],
+ "EMG기반운동기능평가처방론":["EMG 장비 측정 실습","측정 데이터 분석 과제"],
+ "지역체육행정실습":["지자체 체육시설 현장 실습","행정 사례 분석, 실습 일지"],
+ "스포츠빅데이터분석실무":["분석 결과 발표, 팀 프로젝트 점검","데이터 분석 실습(온라인)"],
+ "스포츠경영관리사실무":["실기·모의시험","자격 이론 온라인 강의"],
+ "AI기반골프트레이닝과움직임분석":["스윙 동작 촬영·분석 실습","AI 분석 결과 해석 과제"],
+ "건강운동관리사실무":["실기 모의평가","자격 이론 온라인 강의"],
+ "AI기반시니어트레이닝과근기능관리":["시니어 대상 트레이닝 시연·평가","AI 트레이닝 데이터 해석 과제"]};
+const SEMS=["1-1","1-2","2-1","2-2","3-1","3-2","4-1","4-2"];
+const CRED={"1-1":12,"1-2":9,"2-1":12,"2-2":12,"3-1":17,"3-2":8,"4-1":8,"4-2":5};
+const WEEKS=15, EXAM=[8,15], PREF=[10,6,12,5,13,9,11,7,14];
+const $=id=>document.getElementById(id);
+const DEF={h:4,d:8,n:50,cap:20,c3:false};
+function state(){return{h:+$("h").value,d:+$("d").value,n:Math.max(1,+$("n").value||1),cap:Math.max(1,+$("cap").value||1),c3:$("c3").checked}}
+function compute(S){
+  const list=C.filter(c=>S.c3||c.g!=="C3");
+  const perSat=Math.max(1,Math.floor(S.d/S.h)); // 하루에 넣을 수 있는 과목 수
+  const sem={};
+  SEMS.forEach(k=>{const cs=list.filter(c=>c.s===k);
+    // 과목당 필요한 토요일 수: 대면 시간이 하루 한도를 넘으면 여러 날
+    const daysPerCourse=Math.ceil(S.h/S.d);
+    let days;
+    if(S.h<=S.d){days=Math.ceil(cs.length/perSat)}else{days=cs.length*daysPerCourse}
+    const face=cs.length*S.h, total=CRED[k]*WEEKS;
+    sem[k]={cs,days,face,total,online:total-face};});
+  return{list,sem,perSat};
+}
+function sched(days,ncourses,S){
+  // 주차별 과목 수 배치
+  const weeks=PREF.slice(0,days).sort((a,b)=>a-b);const out={};
+  if(!days)return out;
+  let left=ncourses;
+  if(S.h<=S.d){const per=Math.max(1,Math.floor(S.d/S.h));weeks.forEach(w=>{const k=Math.min(per,left);out[w]=k;left-=k;});}
+  else weeks.forEach(w=>out[w]=1);
+  return out;
+}
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},x)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;return e};
+const tip=$("tip");
+function hover(node,html){node.addEventListener("mousemove",e=>{tip.innerHTML=html;tip.hidden=false;tip.style.left=Math.min(e.clientX+12,innerWidth-tip.offsetWidth-8)+"px";tip.style.top=(e.clientY+14)+"px"});node.addEventListener("mouseleave",()=>tip.hidden=true)}
+function vbar(x,y,w,h,r=4){if(h<=0)return"";r=Math.min(r,h,w/2);return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`}
+function hbar(x,y,w,h,r=4){if(w<=0)return"";r=Math.min(r,w,h/2);return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`}
+function niceMax(v){const steps=[4,6,8,10,12,16,20,24,30,40,60];return steps.find(s=>s>=v)||Math.ceil(v/10)*10}
+
+function render(){
+  const S=state();$("ho").textContent=S.h+"시간";$("do").textContent=S.d+"시간";
+  const R=compute(S);
+  const totDays=SEMS.reduce((a,k)=>a+R.sem[k].days,0);
+  const totFace=SEMS.reduce((a,k)=>a+R.sem[k].face,0);
+  const totAll=SEMS.reduce((a,k)=>a+R.sem[k].total,0);
+  const onl=(1-totFace/totAll)*100;
+  const maxK=SEMS.reduce((m,k)=>R.sem[k].days>R.sem[m].days?k:m,SEMS[0]);
+  const active=SEMS.filter(k=>R.sem[k].days>0).length;
+  $("k1").textContent=R.list.length;
+  $("k1s").textContent=S.c3?"실무 11 + 코어3 5":"실무트랙 11과목";
+  $("k2").textContent=totDays+"회";
+  $("k2s").textContent=`대면 ${totFace}시간 · ${active}개 학기`;
+  $("k3").textContent=onl.toFixed(1)+"%";
+  $("k3s").textContent=`${totAll-totFace} / ${totAll}시간`;
+  $("k4").textContent=R.sem[maxK].days+"회";
+  $("k4s").textContent=`${maxK} 학기`;
+
+  // 학기별 토요일 횟수
+  {const W=520,L=36,Rr=12,top=18,B=30,H=230,mx=niceMax(Math.max(4,...SEMS.map(k=>R.sem[k].days))),cw=(W-L-Rr)/SEMS.length,bw=Math.min(34,cw*.55),sy=v=>H-B-v/mx*(H-B-top);
+   const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"학기별 토요일 출석 횟수"});
+   const step=mx<=6?1:2;
+   for(let v=0;v<=mx;v+=step){s.append(el("line",{class:"gl",x1:L,x2:W-Rr,y1:sy(v),y2:sy(v)}));s.append(el("text",{x:L-6,y:sy(v)+4,"text-anchor":"end"},v))}
+   SEMS.forEach((k,i)=>{const d=R.sem[k],x=L+i*cw+(cw-bw)/2;
+     if(d.days){const p=el("path",{d:vbar(x,sy(d.days),bw,sy(0)-sy(d.days)),fill:"var(--sat)"});s.append(p);
+       hover(p,`<b>${k} 학기</b><br>토요일 ${d.days}회 · 대면 ${d.face}시간<br>${d.cs.map(c=>c.n).join("<br>")}`);}
+     s.append(el("text",{class:"val",x:x+bw/2,y:sy(d.days)-6,"text-anchor":"middle"},d.days));
+     s.append(el("text",{x:x+bw/2,y:H-B+18,"text-anchor":"middle"},k));});
+   s.append(el("line",{class:"ax",x1:L,x2:W-Rr,y1:sy(0),y2:sy(0)}));
+   $("c-sat").replaceChildren(s);
+   const empty=SEMS.filter(k=>!R.sem[k].days);
+   $("n-sat").textContent=`토요일 대면은 ${maxK} 학기에 ${R.sem[maxK].days}회로 가장 많습니다.`+(empty.length?` ${empty.join(", ")} 학기는 토요일 대면 없이 전부 온라인입니다.`:"");}
+
+  // 학기별 시간 구성 (가로 누적)
+  {const W=560,L=44,Rr=110,rowH=26,top=6,H=top+SEMS.length*rowH+24,mx=270,sx=v=>L+v/mx*(W-L-Rr);
+   const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"학기별 온라인·대면 시간"});
+   const y1=top+SEMS.length*rowH;
+   for(let v=0;v<=mx;v+=90){s.append(el("line",{class:"gl",x1:sx(v),x2:sx(v),y1:top,y2:y1}));s.append(el("text",{x:sx(v),y:y1+16,"text-anchor":"middle"},v))}
+   SEMS.forEach((k,i)=>{const d=R.sem[k],y=top+i*rowH+5,h=rowH-10;
+     s.append(el("text",{x:L-6,y:y+h/2+4,"text-anchor":"end"},k));
+     const a=el("rect",{x:sx(0),y,width:Math.max(0,sx(d.online)-sx(0)-(d.face?2:0)),height:h,fill:"var(--onl)",rx:d.face?0:3});s.append(a);
+     hover(a,`<b>${k} 학기</b><br>온라인 ${d.online}시간 (${(d.online/d.total*100).toFixed(1)}%)`);
+     if(d.face){const b=el("path",{d:hbar(sx(d.online),y,sx(d.total)-sx(d.online),h),fill:"var(--sat)"});s.append(b);
+       hover(b,`<b>${k} 학기</b><br>토요일 대면 ${d.face}시간 (${(d.face/d.total*100).toFixed(1)}%)`);}
+     s.append(el("text",{class:"val",x:sx(d.total)+6,y:y+h/2+4},d.face?`${d.total} (대면 ${d.face})`:d.total));});
+   s.append(el("line",{class:"ax",x1:sx(0),x2:sx(0),y1:top,y2:y1}));
+   $("c-hrs").replaceChildren(s);}
+
+  // 달력
+  {let h=`<table><thead><tr><th class="sem">학기</th>${Array.from({length:WEEKS},(_,i)=>`<th>${i+1}</th>`).join("")}<th class="sem">토요일</th></tr></thead><tbody>`;
+   SEMS.forEach(k=>{const d=R.sem[k];const sc=sched(d.days,d.cs.length,S);
+     h+=`<tr><th class="sem">${k}</th>`;
+     for(let w=1;w<=WEEKS;w++){const n=sc[w];const ex=EXAM.includes(w);
+       h+= n?`<td class="on" title="${w}주 토요일: ${n}과목">${n}</td>`:`<td class="${ex?"exam":""}" title="${w}주${ex?" 시험 주간":" 온라인"}">${ex?"시":""}</td>`;}
+     h+=`<td class="num" style="background:none;color:var(--fg)">${d.days}회</td></tr>`;});
+   $("cal").innerHTML=h+"</tbody></table>";}
+
+  // 분반
+  {const sec=Math.ceil(S.n/S.cap);const facDays=totDays*sec;
+   const semMax=R.sem[maxK].days*sec;
+   $("t-sec").innerHTML=[
+     ["학년당 학생 수",S.n+"명"],["실습실 1회 수용 인원",S.cap+"명"],
+     ["필요 분반 수",sec+"개 분반"],
+     ["학생 1인 토요일 출석 (4년)",totDays+"회"],
+     ["교원 토요일 출강 (한 학년, 4년 누계)",facDays+"회"],
+     [`가장 많은 학기 (${maxK}) 출강`,semMax+"회 / 15주"]
+   ].map(r=>`<tr><th>${r[0]}</th><td class="num">${r[1]}</td></tr>`).join("");
+   window.__sec=sec;window.__semMax=semMax;}
+
+  // 과목표
+  $("t-course").innerHTML=C.map(c=>{const inc=S.c3||c.g!=="C3";const a=ACT[c.n];
+    return `<tr${inc?"":' style="color:var(--fg3)"'}><td>${c.s}</td><td>${c.n}</td><td>${c.t}</td><td class="num">15</td><td class="num">${inc?S.h+"시간":"–"}</td><td>${inc?a[0]:"토요일 없음 (원격 수행)"}</td><td>${a[1]}</td></tr>`}).join("");
+
+  // 도출 결과
+  const sec=window.__sec, semMax=window.__semMax;
+  const F=[];
+  F.push(["good","온라인",`총 ${totAll}시간 중 ${totAll-totFace}시간(${onl.toFixed(1)}%)이 온라인입니다. 토요일 대면은 ${totFace}시간입니다.`]);
+  F.push(["info","출석",`학생 1인은 4년간 토요일 ${totDays}회 출석하며, ${active}개 학기에만 토요일 대면이 있습니다.`]);
+  F.push([R.sem[maxK].days>=4?"warn":"info","집중",`${maxK} 학기에 토요일 ${R.sem[maxK].days}회가 몰립니다. 이 학기는 학점도 ${CRED[maxK]}학점으로 가장 많아 성인학습자 부담이 큽니다.`]);
+  F.push([sec>=3?"warn":"info","분반",`${S.n}명을 ${S.cap}명씩 나누면 ${sec}개 분반이 필요하고, 교원은 ${maxK} 학기에 토요일 ${semMax}회 출강합니다(15주 중).`]);
+  F.push([S.c3?"info":"warn","코어3",S.c3?"코어3 실습 5과목을 토요일에 포함하면 장비 실습은 대면으로 확인할 수 있지만 토요일 횟수가 늘어납니다.":"코어3 실습 5과목은 토요일 없이 원격으로만 수행합니다. EMG·웨어러블 장비 실습을 원격으로 어떻게 확인할지 정해야 합니다."]);
+  $("findings").innerHTML=F.map(f=>`<li><span class="pill ${f[0]}">${f[1]}</span><span>${f[2]}</span></li>`).join("");
+}
+["h","d","n","cap","c3"].forEach(id=>$(id).addEventListener("input",render));
+$("reset").addEventListener("click",()=>{$("h").value=DEF.h;$("d").value=DEF.d;$("n").value=DEF.n;$("cap").value=DEF.cap;$("c3").checked=DEF.c3;render()});
+render();
+</script>
