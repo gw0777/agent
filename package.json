@@ -1,0 +1,19 @@
+{
+  "name": "hermes-jev-router",
+  "version": "1.0.0",
+  "description": "JEV 평가 라우터 + 브라우저 대시보드 (서건우 교수 백석대 특수체육학과)",
+  "private": true,
+  "main": "router.js",
+  "scripts": {
+    "start": "node router.js",
+    "start:ai-sdk": "node router-ai-sdk.js",
+    "start:direct": "node router-direct.js",
+    "test": "node test-jev.js"
+  },
+  "dependencies": {
+    "ai": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
